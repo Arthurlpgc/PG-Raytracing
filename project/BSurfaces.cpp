@@ -43,4 +43,21 @@ vector<Triangle> GenerateBezierTriangles(const vector<vector<Point> > v,int npts
 	}
 	return ret;
 }
+vector<vector<Point> > dbg1(const vector<vector<Point> > v,int npts1,int npts2){
+	vector<vector<Point> > processedCP,ret;
+	vector<Point> aux,prev,actual;
+	for(int i=0;i<v.size();i++){
+		processedCP.push_back(Casteljau(v[i],npts2));
+		aux.push_back(v[i][0]);
+	}
+	ret.push_back(Casteljau(aux,npts1));
+	for(int i=1;i<npts2;i++){
+		aux.clear();
+		for(int j=0;j<processedCP.size();j++){
+			aux.push_back(processedCP[j][i]);
+		}
+		ret.push_back(Casteljau(aux,npts1));
+	}
+	return ret;
+}
 #endif
