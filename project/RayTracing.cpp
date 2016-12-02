@@ -3,6 +3,7 @@
 #include "geom.h"
 #include "BSurfaces.h"
 #include "camera.h"
+#define TIME_DEBUGGER
 using namespace std;
 
 Camera cam;
@@ -41,17 +42,26 @@ int main(void){
     glfwMakeContextCurrent(window);
    // glfwSetMouseButtonCallback(window, mbpressed);
    // glfwSetCursorPosCallback(window, mmove);
+   	int rendering=0;
     while (!glfwWindowShouldClose(window)){
+    	if(rendering==0){
+    		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        	glClear(GL_COLOR_BUFFER_BIT);
+    		glfwSwapBuffers(window);
+    	}if(rendering==1){
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
   		
   		glColor3f(1, 1, 1);
 		for(int scx=0;scx<screenX;scx++){
+			if(scx%72==0)cout<<(scx/72)*10<<"%\n"<<flush;
 			for(int scy=0;scy<screenY;scy++){
 				bool paint=0;
 				for(int i=0;i<vecTri.size();i++){
 					if(intersect(vecTri[i],cam.position,ray(cam,scx,scy,screenX,screenY))){
 					 	paint=1;
+  						glColor3f((i+1)/double(vecTri.size()), 1, 1);
+						break;
 					}
 				}
 				if(paint){
@@ -66,6 +76,11 @@ int main(void){
 	    cam.position.z+=1;
 	    
 	    glfwSwapBuffers(window);
+	    }
+#ifdef TIME_DEBUGGER
+	    if(rendering==2)break;
+#endif
+	    rendering++;
         glfwPollEvents();
     }
     glfwTerminate();
