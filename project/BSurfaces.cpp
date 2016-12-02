@@ -23,11 +23,12 @@ vector<Point> Casteljau(vector<Point> v,int numPoints){
 }
 vector<Triangle> GenerateBezierTriangles(const vector<vector<Point> > v,int npts1,int npts2){
 	vector<Triangle> ret;
+	//ret.push_back(Triangle(Point(50,20,0),Point(50,50,0),Point(20,50,0)));return ret;
 	vector<vector<Point> > processedCP;
 	vector<Point> aux,prev,actual;
 	for(int i=0;i<v.size();i++){
 		processedCP.push_back(Casteljau(v[i],npts2));
-		aux.push_back(v[i][0]);
+		aux.push_back(processedCP[i][0]);
 	}
 	prev=Casteljau(aux,npts1);
 	for(int i=1;i<npts2;i++){
@@ -40,23 +41,7 @@ vector<Triangle> GenerateBezierTriangles(const vector<vector<Point> > v,int npts
 			ret.push_back(Triangle(actual[j-1],actual[j],prev[j]));
 			ret.push_back(Triangle(actual[j-1],prev[j-1],prev[j]));
 		}
-	}
-	return ret;
-}
-vector<vector<Point> > dbg1(const vector<vector<Point> > v,int npts1,int npts2){
-	vector<vector<Point> > processedCP,ret;
-	vector<Point> aux,prev,actual;
-	for(int i=0;i<v.size();i++){
-		processedCP.push_back(Casteljau(v[i],npts2));
-		aux.push_back(v[i][0]);
-	}
-	ret.push_back(Casteljau(aux,npts1));
-	for(int i=1;i<npts2;i++){
-		aux.clear();
-		for(int j=0;j<processedCP.size();j++){
-			aux.push_back(processedCP[j][i]);
-		}
-		ret.push_back(Casteljau(aux,npts1));
+		prev=actual;
 	}
 	return ret;
 }
