@@ -8,22 +8,22 @@ struct Point{
 	double mag(){
 		return sqrt(x*x+y*y+z*z);
 	}
-	double operator*(Point p){
+	const double operator*(const Point p){
 		return x*p.x+y*p.y+z*p.z;
 	}
-	Point operator*(double d){
+	const Point operator*(const double d){
 		return Point(d*x,d*y,d*z);
 	}
-	Point operator+(Point p){//just use when the "Point" really means a vector
+	Point operator+(const Point p){//just use when the "Point" really means a vector
 		return Point(x+p.x,y+p.y,z+p.z);
 	}
-	Point operator-(Point p){
+	Point operator-(const Point p){
 		return Point(x-p.x,y-p.y,z-p.z);
 	}
-	Point operator%(Point p){
+	Point operator%(const Point p){
 		return Point(y*p.z-z*p.y,z*p.x-x*p.z,x*p.y-y*p.x);
 	}
-	Point operator!(){
+	const Point operator!(){
 		return Point(x/mag(),y/mag(),z/mag());
 	}
 };
