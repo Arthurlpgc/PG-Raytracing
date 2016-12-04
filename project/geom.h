@@ -5,25 +5,25 @@ struct Point{
 	double x,y,z;
 	Point(){}
 	Point(double x,double y,double z):x(x),y(y),z(z){};
-	double mag(){
+	double mag()const{
 		return sqrt(x*x+y*y+z*z);
 	}
-	const double operator*(const Point p){
+	double operator*(const Point& p)const{
 		return x*p.x+y*p.y+z*p.z;
 	}
-	const Point operator*(const double d){
+	Point operator*(double d)const{
 		return Point(d*x,d*y,d*z);
 	}
-	Point operator+(const Point p){//just use when the "Point" really means a vector
+	Point operator+(const Point& p)const{//just use when the "Point" really means a vector
 		return Point(x+p.x,y+p.y,z+p.z);
 	}
-	Point operator-(const Point p){
+	Point operator-(const Point& p)const{
 		return Point(x-p.x,y-p.y,z-p.z);
 	}
-	Point operator%(const Point p){
+	Point operator%(const Point& p)const{
 		return Point(y*p.z-z*p.y,z*p.x-x*p.z,x*p.y-y*p.x);
 	}
-	const Point operator!(){
+	Point operator!()const{
 		return Point(x/mag(),y/mag(),z/mag());
 	}
 };

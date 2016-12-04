@@ -21,7 +21,7 @@ bool intersect(Triangle tri,Point p,Point d){
 	if(t>EPS)return 1;
 	else return 0;
 }
-Point ray(Camera cam,int sx,int sy,int mx,int my){
+Point ray(const Camera cam,int sx,int sy,int mx,int my){
 	Point X=cam.vecN*cam.d;
 	double x=((sx-mx/2.0)/double(mx/2.0))*cam.hx;
 	double y=((sy-my/2.0)/double(my/2.0))*cam.hy;

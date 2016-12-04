@@ -1,4 +1,9 @@
 #include <GLFW/glfw3.h>
+
+#ifdef GPU_OPTIM_CL
+#include <CL/cl.h>
+#endif
+
 #include <bits/stdc++.h>
 #include "geom.h"
 #include "BSurfaces.h"
@@ -48,19 +53,19 @@ int main(void){
     		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         	glClear(GL_COLOR_BUFFER_BIT);
     		glfwSwapBuffers(window);
-    	}if(rendering==1){
+    	}
+    	if(rendering==1){
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT);
-  		
+ 		int VTsize=vecTri.size(); 		
   		glColor3f(1, 1, 1);
 		for(int scx=0;scx<screenX;scx++){
-			if(scx%72==0)cout<<(scx/72)*10<<"%\n"<<flush;
+			bool paint=1;
 			for(int scy=0;scy<screenY;scy++){
-				bool paint=0;
-				for(int i=0;i<vecTri.size();i++){
+				for(int i=0;i<VTsize;i++){
 					if(intersect(vecTri[i],cam.position,ray(cam,scx,scy,screenX,screenY))){
 					 	paint=1;
-  						glColor3f((i+1)/double(vecTri.size()), 1, 1);
+  						glColor3f((i+1)/double(VTsize), 1, 1);
 						break;
 					}
 				}
@@ -73,8 +78,6 @@ int main(void){
 			}
 		}	
 		cout<<"Rendered\n"<<flush;
-	    cam.position.z+=1;
-	    
 	    glfwSwapBuffers(window);
 	    }
 #ifdef TIME_DEBUGGER
