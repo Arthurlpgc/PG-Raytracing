@@ -25,6 +25,8 @@ bits/stdc++.h
 -
 geom.h
 /home/arthur/Desktop/PG-Raytracing/project/geom.h
+lights.h
+/home/arthur/Desktop/PG-Raytracing/project/lights.h
 BSurfaces.h
 /home/arthur/Desktop/PG-Raytracing/project/BSurfaces.h
 camera.h
@@ -35,6 +37,8 @@ bits/stdc++.h
 -
 geom.h
 /home/arthur/Desktop/PG-Raytracing/project/geom.h
+lights.h
+/home/arthur/Desktop/PG-Raytracing/project/lights.h
 camera.h
 /home/arthur/Desktop/PG-Raytracing/project/camera.h
 
@@ -47,6 +51,10 @@ math.h
 -
 
 /home/arthur/Desktop/PG-Raytracing/project/lights.cpp
+
+/home/arthur/Desktop/PG-Raytracing/project/lights.h
+geom.h
+/home/arthur/Desktop/PG-Raytracing/project/geom.h
 
 glfw/include/GLFW/glfw3.h
 stddef.h

@@ -2,6 +2,7 @@
 #define __CAMERA_CPP_INCLUDED
 #include <bits/stdc++.h>
 #include "geom.h"
+#include "lights.h"
 #include "camera.h"
 using namespace std;
 const double EPS=0.0001;
@@ -20,6 +21,11 @@ bool intersect(Triangle tri,Point p,Point d){
 	double t = f*(d2*q);
 	if(t>EPS)return 1;
 	else return 0;
+}
+int getLightTriColor(Triangle tri,LightDirectional lt){
+	Point N=!((tri.c-tri.a)%(tri.b-tri.a));
+	double mult=((N*lt.dir)*lt.Il*tri.kd);
+	return abs(mult*255);
 }
 Point ray(const Camera cam,int sx,int sy,int mx,int my){
 	Point X=cam.vecN*cam.d;

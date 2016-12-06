@@ -3,6 +3,7 @@
 #endif
 #include <bits/stdc++.h>
 #include "geom.h"
+#include "lights.h"
 #include "BSurfaces.h"
 #include "camera.h"
 using namespace std;
@@ -35,7 +36,7 @@ void ReadCP(){
 }
 
 int main(void){
-	ReadCP();
+	ReadCP();LightDirectional lt=LightDirectional(Point(0,0.6,-0.8),1);
 	vector<Triangle> vecTri=GenerateBezierTriangles(ControlPoints,npts1,npts2);
 	cam.normalize();
 #ifdef FORCE_GL_VIEW	
@@ -70,9 +71,9 @@ int main(void){
 				buffer[int(scx+scy*screenX)*3+2]=bgB;
 				for(int i=0;i<VTsize;i++){
 					if(intersect(vecTri[i],cam.position,ray(cam,scx,scy,screenX,screenY))){
-						buffer[int(scx+scy*screenX)*3+0]=255;
-						buffer[int(scx+scy*screenX)*3+1]=255;
-						buffer[int(scx+scy*screenX)*3+2]=255;
+						buffer[int(scx+scy*screenX)*3+0]=getLightTriColor(vecTri[i],lt);
+						buffer[int(scx+scy*screenX)*3+1]=getLightTriColor(vecTri[i],lt);
+						buffer[int(scx+scy*screenX)*3+2]=getLightTriColor(vecTri[i],lt);
 					}
 				}
 //glVertex2f((scx-screenX/2.0)/double(screenX/2.0),(scy-screenY/2.0)/double(screenY/2.0) );

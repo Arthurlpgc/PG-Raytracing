@@ -30,6 +30,7 @@ struct Point{
 
 struct Triangle{
 	Point a,b,c;
+	double kd=0.8;
 	Triangle(Point a,Point b,Point c):a(a),b(b),c(c){};
 };
 #endif 
