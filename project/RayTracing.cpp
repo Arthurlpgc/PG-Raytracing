@@ -1,14 +1,10 @@
 #include <GLFW/glfw3.h>
 
-#ifdef GPU_OPTIM_CL
-#include <CL/cl.h>
-#endif
-
 #include <bits/stdc++.h>
 #include "geom.h"
 #include "BSurfaces.h"
 #include "camera.h"
-#define TIME_DEBUGGER
+//#define TIME_DEBUGGER
 using namespace std;
 
 Camera cam;
@@ -60,7 +56,7 @@ int main(void){
  		int VTsize=vecTri.size(); 		
   		glColor3f(1, 1, 1);
 		for(int scx=0;scx<screenX;scx++){
-			bool paint=1;
+			bool paint=0;
 			for(int scy=0;scy<screenY;scy++){
 				for(int i=0;i<VTsize;i++){
 					if(intersect(vecTri[i],cam.position,ray(cam,scx,scy,screenX,screenY))){
@@ -74,6 +70,7 @@ int main(void){
 					glBegin(GL_POINTS);
 						glVertex2f((scx-screenX/2.0)/double(screenX/2.0),(scy-screenY/2.0)/double(screenY/2.0) );
 					glEnd();
+					paint=0;
 				}
 			}
 		}	
@@ -83,7 +80,7 @@ int main(void){
 #ifdef TIME_DEBUGGER
 	    if(rendering==2)break;
 #endif
-	    rendering++;
+	    rendering=1;
         glfwPollEvents();
     }
     glfwTerminate();

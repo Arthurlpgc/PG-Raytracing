@@ -52,7 +52,7 @@ PROJECT_LOGO           =
 # If a relative path is entered, it will be relative to the location
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = /home/llamaphone/Desktop/PG-Raytracing/glfw/docs
+OUTPUT_DIRECTORY       = /home/arthur/Desktop/PG-Raytracing/glfw/docs
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create
 # 4096 sub-directories (in 2 levels) under the output directory of each output
@@ -649,7 +649,7 @@ WARN_FORMAT            = "$file:$line: $text"
 # and error messages should be written. If left blank the output is written
 # to stderr.
 
-WARN_LOGFILE           = /home/llamaphone/Desktop/PG-Raytracing/glfw/docs/warnings.txt
+WARN_LOGFILE           = /home/arthur/Desktop/PG-Raytracing/glfw/docs/warnings.txt
 
 #---------------------------------------------------------------------------
 # configuration options related to the input files
@@ -660,7 +660,7 @@ WARN_LOGFILE           = /home/llamaphone/Desktop/PG-Raytracing/glfw/docs/warnin
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT                  =  /home/llamaphone/Desktop/PG-Raytracing/glfw/include/GLFW/glfw3.h /home/llamaphone/Desktop/PG-Raytracing/glfw/include/GLFW/glfw3native.h /home/llamaphone/Desktop/PG-Raytracing/glfw/docs/main.dox /home/llamaphone/Desktop/PG-Raytracing/glfw/docs/news.dox /home/llamaphone/Desktop/PG-Raytracing/glfw/docs/moving.dox /home/llamaphone/Desktop/PG-Raytracing/glfw/docs/quick.dox /home/llamaphone/Desktop/PG-Raytracing/glfw/docs/compile.dox /home/llamaphone/Desktop/PG-Raytracing/glfw/docs/build.dox /home/llamaphone/Desktop/PG-Raytracing/glfw/docs/intro.dox /home/llamaphone/Desktop/PG-Raytracing/glfw/docs/context.dox /home/llamaphone/Desktop/PG-Raytracing/glfw/docs/monitor.dox /home/llamaphone/Desktop/PG-Raytracing/glfw/docs/window.dox /home/llamaphone/Desktop/PG-Raytracing/glfw/docs/input.dox /home/llamaphone/Desktop/PG-Raytracing/glfw/docs/vulkan.dox /home/llamaphone/Desktop/PG-Raytracing/glfw/docs/compat.dox
+INPUT                  =  /home/arthur/Desktop/PG-Raytracing/glfw/include/GLFW/glfw3.h /home/arthur/Desktop/PG-Raytracing/glfw/include/GLFW/glfw3native.h /home/arthur/Desktop/PG-Raytracing/glfw/docs/main.dox /home/arthur/Desktop/PG-Raytracing/glfw/docs/news.dox /home/arthur/Desktop/PG-Raytracing/glfw/docs/moving.dox /home/arthur/Desktop/PG-Raytracing/glfw/docs/quick.dox /home/arthur/Desktop/PG-Raytracing/glfw/docs/compile.dox /home/arthur/Desktop/PG-Raytracing/glfw/docs/build.dox /home/arthur/Desktop/PG-Raytracing/glfw/docs/intro.dox /home/arthur/Desktop/PG-Raytracing/glfw/docs/context.dox /home/arthur/Desktop/PG-Raytracing/glfw/docs/monitor.dox /home/arthur/Desktop/PG-Raytracing/glfw/docs/window.dox /home/arthur/Desktop/PG-Raytracing/glfw/docs/input.dox /home/arthur/Desktop/PG-Raytracing/glfw/docs/vulkan.dox /home/arthur/Desktop/PG-Raytracing/glfw/docs/compat.dox
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is
@@ -720,7 +720,7 @@ EXCLUDE_SYMBOLS        = APIENTRY GLFWAPI
 # directories that contain example code fragments that are included (see
 # the \include command).
 
-EXAMPLE_PATH           = /home/llamaphone/Desktop/PG-Raytracing/glfw/examples
+EXAMPLE_PATH           = /home/arthur/Desktop/PG-Raytracing/glfw/examples
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the
 # EXAMPLE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp
@@ -896,13 +896,13 @@ HTML_FILE_EXTENSION    = .html
 # have to redo this when upgrading to a newer version of doxygen or when
 # changing the value of configuration settings such as GENERATE_TREEVIEW!
 
-HTML_HEADER            = /home/llamaphone/Desktop/PG-Raytracing/glfw/docs/header.html
+HTML_HEADER            = /home/arthur/Desktop/PG-Raytracing/glfw/docs/header.html
 
 # The HTML_FOOTER tag can be used to specify a personal HTML footer for
 # each generated HTML page. If it is left blank doxygen will generate a
 # standard footer.
 
-HTML_FOOTER            = /home/llamaphone/Desktop/PG-Raytracing/glfw/docs/footer.html
+HTML_FOOTER            = /home/arthur/Desktop/PG-Raytracing/glfw/docs/footer.html
 
 # The HTML_STYLESHEET tag can be used to specify a user-defined cascading
 # style sheet that is used by each HTML page. It can be used to
@@ -921,7 +921,7 @@ HTML_STYLESHEET        =
 # robust against future updates. Doxygen will copy the style sheet file to
 # the output directory.
 
-HTML_EXTRA_STYLESHEET  = /home/llamaphone/Desktop/PG-Raytracing/glfw/docs/extra.css
+HTML_EXTRA_STYLESHEET  = /home/arthur/Desktop/PG-Raytracing/glfw/docs/extra.css
 
 # The HTML_EXTRA_FILES tag can be used to specify one or more extra images or
 # other source files which should be copied to the HTML output directory. Note
@@ -930,7 +930,7 @@ HTML_EXTRA_STYLESHEET  = /home/llamaphone/Desktop/PG-Raytracing/glfw/docs/extra.
 # files. In the HTML_STYLESHEET file, use the file name only. Also note that
 # the files will be copied as-is; there are no commands or markers available.
 
-HTML_EXTRA_FILES       = /home/llamaphone/Desktop/PG-Raytracing/glfw/docs/spaces.svg
+HTML_EXTRA_FILES       = /home/arthur/Desktop/PG-Raytracing/glfw/docs/spaces.svg
 
 # The HTML_COLORSTYLE_HUE tag controls the color of the HTML output.
 # Doxygen will adjust the colors in the style sheet and background images
