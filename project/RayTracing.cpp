@@ -1,15 +1,16 @@
+#ifdef FORCE_GL_VIEW
 #include <GLFW/glfw3.h>
-
+#endif
 #include <bits/stdc++.h>
 #include "geom.h"
 #include "BSurfaces.h"
 #include "camera.h"
-//#define TIME_DEBUGGER
 using namespace std;
 
 Camera cam;
-double screenY=540,screenX=720;
+const double screenY=540,screenX=720;
 int dim1,dim2,npts1,npts2;
+
 vector<vector<Point> > ControlPoints;
 void ReadCP(){
 	double x,y,z;
@@ -31,58 +32,48 @@ void ReadCP(){
 
 int main(void){
 	ReadCP();
-    vector<Triangle> vecTri=GenerateBezierTriangles(ControlPoints,npts1,npts2);
-    cam.normalize();
-    GLFWwindow* window;
-    if (!glfwInit())return -1;
-    window = glfwCreateWindow(screenX, screenY, "Raytracing", NULL, NULL);
-    if (!window){
-        glfwTerminate();
-        return -1;
-    }
-    glfwMakeContextCurrent(window);
+	vector<Triangle> vecTri=GenerateBezierTriangles(ControlPoints,npts1,npts2);
+	cam.normalize();
+#ifdef FORCE_GL_VIEW	
+	GLFWwindow* window;
+	if (!glfwInit())return -1;
+	window = glfwCreateWindow(screenX, screenY, "Raytracing", NULL, NULL);
+	if (!window){
+		glfwTerminate();
+		return -1;
+	}
+	glfwMakeContextCurrent(window);
    // glfwSetMouseButtonCallback(window, mbpressed);
    // glfwSetCursorPosCallback(window, mmove);
    	int rendering=0;
-    while (!glfwWindowShouldClose(window)){
-    	if(rendering==0){
-    		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        	glClear(GL_COLOR_BUFFER_BIT);
-    		glfwSwapBuffers(window);
-    	}
-    	if(rendering==1){
-        glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+	while (!glfwWindowShouldClose(window)){
+		if(rendering==0){
+			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT);
+			glfwSwapBuffers(window);
+		}
+		if(rendering==1){
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT);
+#endif
  		int VTsize=vecTri.size(); 		
-  		glColor3f(1, 1, 1);
 		for(int scx=0;scx<screenX;scx++){
-			bool paint=0;
 			for(int scy=0;scy<screenY;scy++){
 				for(int i=0;i<VTsize;i++){
 					if(intersect(vecTri[i],cam.position,ray(cam,scx,scy,screenX,screenY))){
-					 	paint=1;
-  						glColor3f((i+1)/double(VTsize), 1, 1);
-						break;
 					}
 				}
-				if(paint){
-					glPointSize(1);
-					glBegin(GL_POINTS);
-						glVertex2f((scx-screenX/2.0)/double(screenX/2.0),(scy-screenY/2.0)/double(screenY/2.0) );
-					glEnd();
-					paint=0;
-				}
+//glVertex2f((scx-screenX/2.0)/double(screenX/2.0),(scy-screenY/2.0)/double(screenY/2.0) );
 			}
 		}	
 		cout<<"Rendered\n"<<flush;
-	    glfwSwapBuffers(window);
-	    }
-#ifdef TIME_DEBUGGER
-	    if(rendering==2)break;
+#ifdef FORCE_GL_VIEW
+		glfwSwapBuffers(window);
+		}
+		rendering++;
+		glfwPollEvents();
+	}
+	glfwTerminate();
 #endif
-	    rendering=1;
-        glfwPollEvents();
-    }
-    glfwTerminate();
-    return 0;
+	return 0;
 }
