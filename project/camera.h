@@ -12,7 +12,6 @@ struct Camera{
 		vecN=!vecN;
 		vecU=!(vecV%vecN);
 		vecV=!(vecN%vecU);
-		cout<<vecN.mag()<<" "<<vecV.mag()<<" "<<vecU.mag()<<endl;
 	}
 };
 bool intersect(Triangle tri,Point p,Point d);
