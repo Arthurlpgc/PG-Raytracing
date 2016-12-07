@@ -1,1 +1,0 @@
-/usr/bin/c++      CMakeFiles/pg.dir/project/geom.cpp.o CMakeFiles/pg.dir/project/RayTracing.cpp.o CMakeFiles/pg.dir/project/camera.cpp.o CMakeFiles/pg.dir/project/BSurfaces.cpp.o CMakeFiles/pg.dir/project/lights.cpp.o  -o pg -rdynamic 

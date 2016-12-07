@@ -1,3 +1,0 @@
-/home/arthur/Desktop/PG-Raytracing/CMakeFiles/edit_cache.dir
-/home/arthur/Desktop/PG-Raytracing/CMakeFiles/rebuild_cache.dir
-/home/arthur/Desktop/PG-Raytracing/CMakeFiles/pg.dir
