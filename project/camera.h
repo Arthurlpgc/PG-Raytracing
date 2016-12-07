@@ -16,7 +16,8 @@ struct Camera{
 };
 bool intersect(Triangle tri,Point p,Point d);
 double intersectQuad(Quadric *q, Point p, Point d);
-int getLightTriColor(Triangle tri,LightDirectional lt);
+double getLightTriColor(Triangle tri,LightDirectional lt);
+double getLightQuadColor(Quadric quad,LightDirectional lt,Point inter);
 Point triXray(Triangle tri,Point p,Point d);
 Point ray(Camera cam,int sx,int sy,int mx,int my);
 #endif

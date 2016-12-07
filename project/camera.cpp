@@ -85,15 +85,20 @@ Point triXray(Triangle tri,Point p,Point d){
 	double t = f*(d2*q);
 	return (tri.c*v)+(tri.b*u)+(tri.a*(1.0-u-v));
 }
-int getLightTriColor(Triangle tri,LightDirectional lt){
+double getLightTriColor(Triangle tri,LightDirectional lt){
 	Point N=!((tri.c-tri.a)%(tri.b-tri.a));
 	double mult=((N*lt.dir)*lt.Il*tri.kd);
-	return abs(mult*255);
+	return fabs(mult);
+}
+double getLightQuadColor(Quadric quad,LightDirectional lt,Point inter){
+	Point N(2*quad.a*inter.x+quad.d*inter.y+quad.e*inter.z+quad.g,2*quad.b*inter.y+quad.d*inter.x+quad.f*inter.z+quad.h,2*quad.c*inter.z+quad.e*inter.x+quad.e*inter.y+quad.j);
+	double mult=((N*lt.dir)*lt.Il*quad.kd);
+	return fabs(mult);
 }
 Point ray(const Camera cam,int sx,int sy,int mx,int my){
 	Point X=cam.vecN*cam.d;
-	double x=((sx-mx/2.0)/double(mx/2.0))*cam.hx;
 	double y=((sy-my/2.0)/double(my/2.0))*cam.hy;
+	double x=((sx-mx/2.0)/double(mx/2.0))*cam.hx;
 	return X+(cam.vecV*y)+(cam.vecU*x);
 }
 #endif
