@@ -34,4 +34,12 @@ struct Triangle{
 	Triangle(Point a,Point b,Point c):a(a),b(b),c(c){};
 	Triangle(Point a,Point b,Point c,int R,int G,int B,double kd):a(a),b(b),c(c),kd(kd),clrR(R),clrG(G),clrB(B){};
 };
+
+struct Quadric{
+	double a,b,c,d,e,f,g,h,j,k; //coefficients of quadric surface
+	double kd, ka, ks;
+	int clrR, clrG, clrB;
+	int pot;
+	Quadric(double a, double b, double c, double d, double e, double f, double g, double h, double j, double k, double kd, double ka, double ks, int R, int G, int B, int pot):a(a),b(b),c(c),d(d),e(e),f(f),g(g),h(h),j(j),k(k),kd(kd),ka(ka),ks(ks),clrR(R),clrG(G),clrB(B),pot(pot){};
+};
 #endif 
