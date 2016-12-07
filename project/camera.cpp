@@ -41,7 +41,7 @@ double intersectQuad(Quadric *q, Point p, Point dir){
 		t = (-ccoef)/(bcoef);
 	} else {
 		disc = bcoef*bcoef - 4*acoef*ccoef;
-		if(disc < -EPS){cout<<acoef<<" "<<bcoef<<" "<<ccoef<<" "<<disc<<"culpa de caio";
+		if(disc < -EPS){
 			return -1.0;
 		}
 
