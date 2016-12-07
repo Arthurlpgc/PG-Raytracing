@@ -97,6 +97,7 @@ int main(void){
 							buffer[int(scx+scy*screenX)*3+1]=bgG;
 							buffer[int(scx+scy*screenX)*3+2]=bgB;
 							for(int ltt=0;ltt<vecLgt.size();ltt++){						
+								if(((!vecLgt[ltt].dir)*(!ray(cam,scx,scy,screenX,screenY)))<=0)continue;
 								bool notBlk=true;
 								for(int j=0;j<VTsize;j++){
 									if(intersect(vecTri[j],txr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0)))notBlk=false;
