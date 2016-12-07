@@ -83,7 +83,7 @@ int main(void){
 		memset(buffer,0,sizeof buffer);
  		int VTsize=vecTri.size(); 		
 		for(int scx=0;scx<screenX;scx++){
-//			cerr<<scx<<"-"<<VTsize<<endl;
+			cerr<<scx<<"-"<<VTsize<<endl;
 			for(int scy=0;scy<screenY;scy++){
 				Dists[int(scx+scy*screenX)]=100000000000000000000.0;
 				buffer[int(scx+scy*screenX)*3+0]=bgR;
