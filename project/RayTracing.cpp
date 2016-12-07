@@ -56,8 +56,8 @@ void ReadCP(){
 }
 
 int main(void){
-	Quadric quad(1,1,1,0,0,0,0,0,0,-1,1,0,0,255,255,255,0);
-	cout<<intersectQuad(&quad,Point(0,0,10),Point(0,0,-1));return 0;
+	Quadric quad(1,1,1,0,0,0,0,0,0,-100,1,0,0,255,255,255,0);
+	//cout<<intersectQuad(&quad,Point(0,0,10),Point(0,0,-1));return 0;
 	ReadCP();
 	cam.normalize();
 #ifdef FORCE_GL_VIEW	
@@ -115,7 +115,7 @@ int main(void){
 					}
 				}
 				if(intersectQuad(&quad,cam.position,ray(cam,scx,scy,screenX,screenY))>0){
-					buffer[int(scx+scy*screenX)*3+0]=255;cerr<<scx<<","<<scy<<"------------\n";
+					buffer[int(scx+scy*screenX)*3+0]=255;
 					buffer[int(scx+scy*screenX)*3+1]=255;
 					buffer[int(scx+scy*screenX)*3+2]=255;
 				}
