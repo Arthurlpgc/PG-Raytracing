@@ -5,5 +5,5 @@
 using namespace std;
 Point FindPointInBcurve(vector<Point> v,double t);
 vector<Point> Casteljau(vector<Point> v,int numPoints);
-vector<Triangle> GenerateBezierTriangles(const vector<vector<Point> > v,int npts1,int npts2);
+vector<Triangle> GenerateBezierTriangles(const vector<vector<Point> > v,int npts1,int npts2,int R,int G,int B,double kd);
 #endif

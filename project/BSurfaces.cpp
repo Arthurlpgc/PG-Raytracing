@@ -21,7 +21,7 @@ vector<Point> Casteljau(vector<Point> v,int numPoints){
 	}
 	return BezierCurve;
 }
-vector<Triangle> GenerateBezierTriangles(const vector<vector<Point> > v,int npts1,int npts2){
+vector<Triangle> GenerateBezierTriangles(const vector<vector<Point> > v,int npts1,int npts2,int R,int G,int B,double kd){
 	vector<Triangle> ret;
 	//ret.push_back(Triangle(Point(50,20,0),Point(50,50,0),Point(20,50,0)));return ret;
 	vector<vector<Point> > processedCP;
@@ -38,8 +38,8 @@ vector<Triangle> GenerateBezierTriangles(const vector<vector<Point> > v,int npts
 		}
 		actual=Casteljau(aux,npts1);
 		for(int j=1;j<npts1;j++){
-			ret.push_back(Triangle(actual[j-1],actual[j],prev[j]));
-			ret.push_back(Triangle(actual[j-1],prev[j-1],prev[j]));
+			ret.push_back(Triangle(actual[j-1],actual[j],prev[j],R,G,B,kd));
+			ret.push_back(Triangle(actual[j-1],prev[j-1],prev[j],R,G,B,kd));
 		}
 		prev=actual;
 	}

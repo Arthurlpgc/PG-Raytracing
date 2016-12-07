@@ -38,7 +38,9 @@ void ReadCP(){
 				ControlPoints.push_back(auxV);
 			}
 			cin>>npts1>>npts2;
-			aux=GenerateBezierTriangles(ControlPoints,npts1,npts2);
+			int R,G,B;double kd;
+			cin>>R>>G>>B>>kd;
+			aux=GenerateBezierTriangles(ControlPoints,npts1,npts2,R,G,B,kd);
 			vecTri.insert(vecTri.end(),make_move_iterator(aux.begin()),make_move_iterator(aux.end()));
 		}else if(input=="size")cin>>screenX>>screenY;
 		else if(input=="light"){
@@ -46,7 +48,7 @@ void ReadCP(){
 			cin>>x>>y>>z>>i;
 			vecLgt.push_back(LightDirectional(!Point(x,y,z),i));
 		}else if(input=="background")cin>>bgR>>bgG>>bgB;
-	}
+	}	
 	buffer=(int*)malloc(sizeof(int)*screenX*screenY*3);
 	Dists=(double*)malloc(sizeof(double)*screenX*screenY);
 	cout<<screenX<<" "<<screenY<<endl;
@@ -81,7 +83,7 @@ int main(void){
 		memset(buffer,0,sizeof buffer);
  		int VTsize=vecTri.size(); 		
 		for(int scx=0;scx<screenX;scx++){
-			cerr<<scx<<endl;
+//			cerr<<scx<<"-"<<VTsize<<endl;
 			for(int scy=0;scy<screenY;scy++){
 				Dists[int(scx+scy*screenX)]=100000000000000000000.0;
 				buffer[int(scx+scy*screenX)*3+0]=bgR;
@@ -100,9 +102,9 @@ int main(void){
 									if(intersect(vecTri[j],txr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0)))notBlk=false;
 								}
 								if(notBlk){
-									buffer[int(scx+scy*screenX)*3+0]=max(getLightTriColor(vecTri[i],vecLgt[ltt]),buffer[int(scx+scy*screenX)*3+0]);
-									buffer[int(scx+scy*screenX)*3+1]=max(getLightTriColor(vecTri[i],vecLgt[ltt]),buffer[int(scx+scy*screenX)*3+1]);
-									buffer[int(scx+scy*screenX)*3+2]=max(getLightTriColor(vecTri[i],vecLgt[ltt]),buffer[int(scx+scy*screenX)*3+2]);
+									buffer[int(scx+scy*screenX)*3+0]=max(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrR/255,buffer[int(scx+scy*screenX)*3+0]);
+									buffer[int(scx+scy*screenX)*3+1]=max(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrG/255,buffer[int(scx+scy*screenX)*3+1]);
+									buffer[int(scx+scy*screenX)*3+2]=max(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrB/255,buffer[int(scx+scy*screenX)*3+2]);
 								}	
 							}
 							Dists[int(scx+scy*screenX)]=(txr-cam.position).mag();
