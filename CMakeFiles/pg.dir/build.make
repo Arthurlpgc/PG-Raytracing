@@ -194,15 +194,6 @@ pg: CMakeFiles/pg.dir/project/camera.cpp.o
 pg: CMakeFiles/pg.dir/project/BSurfaces.cpp.o
 pg: CMakeFiles/pg.dir/project/lights.cpp.o
 pg: CMakeFiles/pg.dir/build.make
-pg: glfw/src/libglfw3.a
-pg: /usr/lib/x86_64-linux-gnu/libGL.so
-pg: /usr/lib/x86_64-linux-gnu/librt.so
-pg: /usr/lib/x86_64-linux-gnu/libm.so
-pg: /usr/lib/x86_64-linux-gnu/libX11.so
-pg: /usr/lib/x86_64-linux-gnu/libXrandr.so
-pg: /usr/lib/x86_64-linux-gnu/libXinerama.so
-pg: /usr/lib/x86_64-linux-gnu/libXxf86vm.so
-pg: /usr/lib/x86_64-linux-gnu/libXcursor.so
 pg: CMakeFiles/pg.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/arthur/Desktop/PG-Raytracing/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable pg"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/pg.dir/link.txt --verbose=$(VERBOSE)
