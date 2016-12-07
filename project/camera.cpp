@@ -22,6 +22,18 @@ bool intersect(Triangle tri,Point p,Point d){
 	if(t>EPS)return 1;
 	else return 0;
 }
+Point triXray(Triangle tri,Point p,Point d){
+	Point d1=tri.b-tri.a,d2=tri.c-tri.a;
+	Point h=d%d2;
+	double a=d1*h;
+	double f=1/a;
+	Point s=p-tri.a;
+	double u=f*(s*h);
+	Point q=s%d1;
+	double v=f*(d*q);
+	double t = f*(d2*q);
+	return (tri.c*v)+(tri.b*u)+(tri.a*(1.0-u-v));
+}
 int getLightTriColor(Triangle tri,LightDirectional lt){
 	Point N=!((tri.c-tri.a)%(tri.b-tri.a));
 	double mult=((N*lt.dir)*lt.Il*tri.kd);
