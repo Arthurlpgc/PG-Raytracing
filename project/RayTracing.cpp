@@ -1,6 +1,3 @@
-#ifdef FORCE_GL_VIEW
-#include <GLFW/glfw3.h>
-#endif
 #include <bits/stdc++.h>
 #include "geom.h"
 #include "lights.h"
@@ -58,120 +55,85 @@ void ReadCP(){
 }
 
 int main(void){
-	Quadric quad(1,1,1,0,0,0,0,0,0,-100,0.1,0.2,0,0,159,23,0);vecQuad.push_back(quad);
+	Quadric quad(1,1,1,0,0,0,0,0,0,-100,0.1,0.2,0,0,159,23,0);//vecQuad.push_back(quad);
 	ReadCP();
 	cam.normalize();
-#ifdef FORCE_GL_VIEW	
-	GLFWwindow* window;
-	if (!glfwInit())return -1;
-	window = glfwCreateWindow(screenX, screenY, "Raytracing", NULL, NULL);
-	if (!window){
-		glfwTerminate();
-		return -1;
-	}
-	glfwMakeContextCurrent(window);
-   // glfwSetMouseButtonCallback(window, mbpressed);
-   // glfwSetCursorPosCallback(window, mmove);
-   	int rendering=0;
-	while (!glfwWindowShouldClose(window)){
-		if(rendering==0){
-			glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT);
-			glfwSwapBuffers(window);
-		}
-		if(rendering==1){
-		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-#endif
-		memset(buffer,0,sizeof buffer);
- 		int VTsize=vecTri.size(),VQsize=vecQuad.size(); 		
-		for(int scx=0;scx<screenX;scx++){
-			cerr<<scx<<"-"<<VQsize<<endl;
-			for(int scy=0;scy<screenY;scy++){
-				Dists[int(scx+scy*screenX)]=100000000000000000000.0;
-				buffer[int(scx+scy*screenX)*3+0]=bgR;
-				buffer[int(scx+scy*screenX)*3+1]=bgG;
-				buffer[int(scx+scy*screenX)*3+2]=bgB;
-				for(int i=0;i<VTsize;i++){
-					if(intersect(vecTri[i],cam.position,ray(cam,scx,scy,screenX,screenY))){
-						Point txr=triXray(vecTri[i],cam.position,!ray(cam,scx,scy,screenX,screenY));
-						if((txr-cam.position).mag()<Dists[int(scx+scy*screenX)]){
-							buffer[int(scx+scy*screenX)*3+0]=IlumAmb*vecTri[i].ka*vecTri[i].clrR;
-							buffer[int(scx+scy*screenX)*3+1]=IlumAmb*vecTri[i].ka*vecTri[i].clrG;
-							buffer[int(scx+scy*screenX)*3+2]=IlumAmb*vecTri[i].ka*vecTri[i].clrB;
-							for(int ltt=0;ltt<vecLgt.size();ltt++){						
-								if(((!vecLgt[ltt].dir)*(!ray(cam,scx,scy,screenX,screenY)))<=0)continue;
-								bool notBlk=true;
-								for(int j=0;j<VTsize;j++){
-									if(intersect(vecTri[j],txr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0)))notBlk=false;
-								}
-								for(int j=0;j<VQsize;j++){
-									if(intersectQuad(&vecQuad[j],txr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0))>EPS)notBlk=false;	
-								}
-								if(notBlk){
-									buffer[int(scx+scy*screenX)*3+0]=min(
-max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrR+vecTri[i].ka*IlumAmb*vecTri[i].clrR),buffer[int(scx+scy*screenX)*3+0]),255);
-									buffer[int(scx+scy*screenX)*3+1]=min(
-max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrG+vecTri[i].ka*IlumAmb*vecTri[i].clrG),buffer[int(scx+scy*screenX)*3+1]),255);
-									buffer[int(scx+scy*screenX)*3+2]=min(
-max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrB+vecTri[i].ka*IlumAmb*vecTri[i].clrB),buffer[int(scx+scy*screenX)*3+2]),255);
-								}	
-							}
-							Dists[int(scx+scy*screenX)]=(txr-cam.position).mag();
-						}
-					}
-				}
-				for(int i=0;i<VQsize;i++){
-					double dstqd=intersectQuad(&vecQuad[i],cam.position,!ray(cam,scx,scy,screenX,screenY));
-					if(dstqd>0&&dstqd<Dists[int(scx+scy*screenX)]){
-						Dists[int(scx+scy*screenX)]=dstqd;
-						Point qxr=((!ray(cam,scx,scy,screenX,screenY))*dstqd)+cam.position;
-						buffer[int(scx+scy*screenX)*3+0]=IlumAmb*vecQuad[i].ka*vecQuad[i].clrR;
-						buffer[int(scx+scy*screenX)*3+1]=IlumAmb*vecQuad[i].ka*vecQuad[i].clrG;
-						buffer[int(scx+scy*screenX)*3+2]=IlumAmb*vecQuad[i].ka*vecQuad[i].clrB;
+	memset(buffer,0,sizeof buffer);
+	int VTsize=vecTri.size(),VQsize=vecQuad.size(); 		
+	for(int scx=0;scx<screenX;scx++){
+		cerr<<scx<<"-"<<VQsize<<endl;
+		for(int scy=0;scy<screenY;scy++){
+			Dists[int(scx+scy*screenX)]=100000000000000000000.0;
+			buffer[int(scx+scy*screenX)*3+0]=bgR;
+			buffer[int(scx+scy*screenX)*3+1]=bgG;
+			buffer[int(scx+scy*screenX)*3+2]=bgB;
+			for(int i=0;i<VTsize;i++){
+				if(intersect(vecTri[i],cam.position,ray(cam,scx,scy,screenX,screenY))){
+					Point txr=triXray(vecTri[i],cam.position,!ray(cam,scx,scy,screenX,screenY));
+					if((txr-cam.position).mag()<Dists[int(scx+scy*screenX)]){
+						buffer[int(scx+scy*screenX)*3+0]=IlumAmb*vecTri[i].ka*vecTri[i].clrR;
+						buffer[int(scx+scy*screenX)*3+1]=IlumAmb*vecTri[i].ka*vecTri[i].clrG;
+						buffer[int(scx+scy*screenX)*3+2]=IlumAmb*vecTri[i].ka*vecTri[i].clrB;
 						for(int ltt=0;ltt<vecLgt.size();ltt++){						
 							if(((!vecLgt[ltt].dir)*(!ray(cam,scx,scy,screenX,screenY)))<=0)continue;
 							bool notBlk=true;
 							for(int j=0;j<VTsize;j++){
-								if(intersect(vecTri[j],qxr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0)))notBlk=false;
+								if(intersect(vecTri[j],txr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0)))notBlk=false;
 							}
 							for(int j=0;j<VQsize;j++){
-								if(intersectQuad(&vecQuad[j],qxr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0))>EPS)notBlk=false;	
+								if(intersectQuad(&vecQuad[j],txr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0))>EPS)notBlk=false;	
 							}
 							if(notBlk){
-								buffer[int(scx+scy*screenX)*3+0]=min(255,max(buffer[int(scx+scy*screenX)*3+0],
-int(IlumAmb*vecQuad[i].ka*vecQuad[i].clrR+getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrR)));
-								buffer[int(scx+scy*screenX)*3+1]=min(255,max(buffer[int(scx+scy*screenX)*3+1],
-int(IlumAmb*vecQuad[i].ka*vecQuad[i].clrG+getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrG)));
-								buffer[int(scx+scy*screenX)*3+2]=min(255,max(buffer[int(scx+scy*screenX)*3+2],
-int(IlumAmb*vecQuad[i].ka*vecQuad[i].clrB+getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrB)));
+								buffer[int(scx+scy*screenX)*3+0]=min(
+max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrR+vecTri[i].ka*IlumAmb*vecTri[i].clrR),buffer[int(scx+scy*screenX)*3+0]),255);
+								buffer[int(scx+scy*screenX)*3+1]=min(
+max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrG+vecTri[i].ka*IlumAmb*vecTri[i].clrG),buffer[int(scx+scy*screenX)*3+1]),255);
+								buffer[int(scx+scy*screenX)*3+2]=min(
+max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrB+vecTri[i].ka*IlumAmb*vecTri[i].clrB),buffer[int(scx+scy*screenX)*3+2]),255);
 							}	
 						}
+						Dists[int(scx+scy*screenX)]=(txr-cam.position).mag();
 					}
 				}
+			}
+			for(int i=0;i<VQsize;i++){
+				double dstqd=intersectQuad(&vecQuad[i],cam.position,!ray(cam,scx,scy,screenX,screenY));
+				if(dstqd>0&&dstqd<Dists[int(scx+scy*screenX)]){
+					Dists[int(scx+scy*screenX)]=dstqd;
+					Point qxr=((!ray(cam,scx,scy,screenX,screenY))*dstqd)+cam.position;
+					buffer[int(scx+scy*screenX)*3+0]=IlumAmb*vecQuad[i].ka*vecQuad[i].clrR;
+					buffer[int(scx+scy*screenX)*3+1]=IlumAmb*vecQuad[i].ka*vecQuad[i].clrG;
+					buffer[int(scx+scy*screenX)*3+2]=IlumAmb*vecQuad[i].ka*vecQuad[i].clrB;
+					for(int ltt=0;ltt<vecLgt.size();ltt++){						
+						if(((!vecLgt[ltt].dir)*(!ray(cam,scx,scy,screenX,screenY)))<=0)continue;
+						bool notBlk=true;
+						for(int j=0;j<VTsize;j++){
+							if(intersect(vecTri[j],qxr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0)))notBlk=false;
+						}
+						for(int j=0;j<VQsize;j++){
+							if(intersectQuad(&vecQuad[j],qxr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0))>EPS)notBlk=false;	
+						}
+						if(notBlk){
+							buffer[int(scx+scy*screenX)*3+0]=min(255,max(buffer[int(scx+scy*screenX)*3+0],
+int(IlumAmb*vecQuad[i].ka*vecQuad[i].clrR+getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrR)));
+							buffer[int(scx+scy*screenX)*3+1]=min(255,max(buffer[int(scx+scy*screenX)*3+1],
+int(IlumAmb*vecQuad[i].ka*vecQuad[i].clrG+getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrG)));
+							buffer[int(scx+scy*screenX)*3+2]=min(255,max(buffer[int(scx+scy*screenX)*3+2],
+int(IlumAmb*vecQuad[i].ka*vecQuad[i].clrB+getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrB)));
+						}	
+					}
+				}
+			}
 //glVertex2f((scx-screenX/2.0)/double(screenX/2.0),(scy-screenY/2.0)/double(screenY/2.0) );
-			}
-		}	
-		for(int scy=0;scy<screenY;scy++){
-			for(int scx=0;scx<screenX;scx++){
-				cout<<buffer[int(scx+scy*screenX)*3+0]<<endl;
-				cout<<buffer[int(scx+scy*screenX)*3+1]<<endl;
-				cout<<buffer[int(scx+scy*screenX)*3+2]<<endl;
-			}
 		}
-		cout<<"#Rendered\n"<<flush;
-#ifdef FORCE_GL_VIEW
-		glPointSize(1);
+	}	
+	for(int scy=0;scy<screenY;scy++){
 		for(int scx=0;scx<screenX;scx++){
-			for(int scy=0;scy<screenY;scy++){
-			}
+			cout<<buffer[int(scx+scy*screenX)*3+0]<<endl;
+			cout<<buffer[int(scx+scy*screenX)*3+1]<<endl;
+			cout<<buffer[int(scx+scy*screenX)*3+2]<<endl;
 		}
-		glfwSwapBuffers(window);
-		}
-		rendering++;
-		glfwPollEvents();
 	}
-	glfwTerminate();
-#endif
+	cout<<"#Rendered\n"<<flush;
 	return 0;
 }
