@@ -58,15 +58,15 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 					if(notBlk){
 						cor.R=min(
 	max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrR+vecTri[i].ka*IlumAmb*vecTri[i].clrR+
-	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(vecLgt[ltt].dir^N))*(!raydir)),vecTri[i].pot)))
+	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(N^vecLgt[ltt].dir))*(!raydir)),vecTri[i].pot)))*255
 	,cor.R),255);
 						cor.G=min(
 	max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrG+vecTri[i].ka*IlumAmb*vecTri[i].clrG+
-	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(vecLgt[ltt].dir^N))*(!raydir)),vecTri[i].pot)))
+	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(N^vecLgt[ltt].dir))*(!raydir)),vecTri[i].pot)))*255
 	,cor.G),255);
 						cor.B=min(
 	max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrB+vecTri[i].ka*IlumAmb*vecTri[i].clrB+
-	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(vecLgt[ltt].dir^N))*(!raydir)),vecTri[i].pot)))
+	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(N^vecLgt[ltt].dir))*(!raydir)),vecTri[i].pot)))*255
 	,cor.B),255);
 					}	
 				}
@@ -97,15 +97,15 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 				if(notBlk){
 					cor.R=min(255,max(cor.R,
 	int(IlumAmb*vecQuad[i].ka*vecQuad[i].clrR+getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrR+
-	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(fabs((!(vecLgt[ltt].dir^N))*(!raydir)),vecQuad[i].pot))
+	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(fabs((!(N^vecLgt[ltt].dir))*(!raydir)),vecQuad[i].pot))*255
 	)));
 					cor.G=min(255,max(cor.G,
 	int(IlumAmb*vecQuad[i].ka*vecQuad[i].clrG+getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrG+
-	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(fabs((!(vecLgt[ltt].dir^N))*(!raydir)),vecQuad[i].pot))
+	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(fabs((!(N^vecLgt[ltt].dir))*(!raydir)),vecQuad[i].pot))*255
 	)));
 					cor.B=min(255,max(cor.B,
 	int(IlumAmb*vecQuad[i].ka*vecQuad[i].clrB+getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrB+
-	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(fabs((!(vecLgt[ltt].dir^N))*(!raydir)),vecQuad[i].pot))
+	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(fabs((!(N^vecLgt[ltt].dir))*(!raydir)),vecQuad[i].pot))*255
 	)));
 				}	
 			}
