@@ -7,7 +7,7 @@ using namespace std;
 const double EPS=0.001;
 Camera cam;
 double screenY=540,screenX=720;
-int dim1,dim2,npts1,npts2,bgR=0,bgG=0,bgB=0,VTsize,VQsize;double IlumAmb=0.2;
+int dim1,dim2,npts1,npts2,bgR=0,bgG=0,bgB=0,VTsize,VQsize,supersample=0;double IlumAmb=0.2;
 int *buffer;
 double *Dists;
 vector<vector<Point> > ControlPoints;
@@ -40,12 +40,19 @@ color3f getRayColor(Point initpos,Point raydir){
 						if(intersectQuad(&vecQuad[j],txr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0))>EPS)notBlk=false;	
 					}
 					if(notBlk){
+						Point N=!((vecTri[i].a-vecTri[i].b)%(vecTri[i].a-vecTri[i].c));
 						cor.R=min(
-	max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrR+vecTri[i].ka*IlumAmb*vecTri[i].clrR),cor.R),255);
+	max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrR+vecTri[i].ka*IlumAmb*vecTri[i].clrR+
+	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(vecLgt[ltt].dir^N))*(!raydir)),vecTri[i].pot)))
+	,cor.R),255);
 						cor.G=min(
-	max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrG+vecTri[i].ka*IlumAmb*vecTri[i].clrG),cor.G),255);
+	max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrG+vecTri[i].ka*IlumAmb*vecTri[i].clrG+
+	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(vecLgt[ltt].dir^N))*(!raydir)),vecTri[i].pot)))
+	,cor.G),255);
 						cor.B=min(
-	max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrB+vecTri[i].ka*IlumAmb*vecTri[i].clrB),cor.B),255);
+	max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrB+vecTri[i].ka*IlumAmb*vecTri[i].clrB+
+	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(vecLgt[ltt].dir^N))*(!raydir)),vecTri[i].pot)))
+	,cor.B),255);
 					}	
 				}
 				Dists=(txr-initpos).mag();
@@ -74,15 +81,15 @@ color3f getRayColor(Point initpos,Point raydir){
 					Point N(2*quad.a*inter.x+quad.d*inter.y+quad.e*inter.z+quad.g,2*quad.b*inter.y+quad.d*inter.x+quad.f*inter.z+quad.h,2*quad.c*inter.z+quad.e*inter.x+quad.e*inter.y+quad.j);
 					cor.R=min(255,max(cor.R,
 	int(IlumAmb*vecQuad[i].ka*vecQuad[i].clrR+getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrR+
-	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow((vecLgt[ltt].dir^N)*(!raydir),vecQuad[i].pot))
+	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(fabs((!(vecLgt[ltt].dir^N))*(!raydir)),vecQuad[i].pot))
 	)));
 					cor.G=min(255,max(cor.G,
 	int(IlumAmb*vecQuad[i].ka*vecQuad[i].clrG+getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrG+
-	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow((vecLgt[ltt].dir^N)*(!raydir),vecQuad[i].pot))
+	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(fabs((!(vecLgt[ltt].dir^N))*(!raydir)),vecQuad[i].pot))
 	)));
 					cor.B=min(255,max(cor.B,
 	int(IlumAmb*vecQuad[i].ka*vecQuad[i].clrB+getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrB+
-	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow((!(vecLgt[ltt].dir^N))*(!raydir),vecQuad[i].pot))
+	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(fabs((!(vecLgt[ltt].dir^N))*(!raydir)),vecQuad[i].pot))
 	)));
 				}	
 			}
@@ -113,9 +120,9 @@ void ReadCP(){
 				ControlPoints.push_back(auxV);
 			}
 			cin>>npts1>>npts2;
-			int R,G,B;double kd;
-			cin>>R>>G>>B>>kd;
-			aux=GenerateBezierTriangles(ControlPoints,npts1,npts2,R,G,B,kd);
+			int R,G,B;double ka,kd,ks,pot,KS,KT,ir;
+			cin>>R>>G>>B>>ka>>kd>>ks>>pot>>KS>>KT>>ir;
+			aux=GenerateBezierTriangles(ControlPoints,npts1,npts2,R,G,B,ka,kd,ks,pot,KS,KT,ir);
 			vecTri.insert(vecTri.end(),make_move_iterator(aux.begin()),make_move_iterator(aux.end()));
 		}else if(input=="size")cin>>screenX>>screenY;
 		else if(input=="light"){
@@ -127,16 +134,18 @@ void ReadCP(){
 			Quadric quad;
 			cin>>quad.a>>quad.b>>quad.c>>quad.d>>quad.e>>quad.f>>quad.g>>quad.h>>quad.j>>quad.k>>quad.clrR>>quad.clrG>>quad.clrB;
 			cin>>quad.ka>>quad.kd>>quad.ks>>quad.pot>>quad.KS>>quad.KT>>quad.ir;
-		}
-	}	
+			vecQuad.push_back(quad);
+		}else if(input=="supersampling")cin>>supersample;
+	}
+	cout<<screenX<<" "<<screenY<<endl;
+	screenX*=(1+supersample);
+	screenY*=(1+supersample);	
 	buffer=(int*)malloc(sizeof(int)*screenX*screenY*3);
 	//Dists=(double*)malloc(sizeof(double)*screenX*screenY);
-	cout<<screenX<<" "<<screenY<<endl;
 	cout<<"#DONE!\n255\n";
 }
 
 int main(void){
-	Quadric quad(1,1,1,0,0,0,0,0,0,-100,0.2,0.1,0.1,0,159,23,2.2);vecQuad.push_back(quad);
 	ReadCP();
 	cam.normalize();
 	memset(buffer,0,sizeof buffer);
@@ -151,11 +160,19 @@ int main(void){
 			buffer[int(scx+scy*screenX)*3+2]=cor.B;
 		}
 	}	
-	for(int scy=0;scy<screenY;scy++){
-		for(int scx=0;scx<screenX;scx++){
-			cout<<buffer[int(scx+scy*screenX)*3+0]<<endl;
-			cout<<buffer[int(scx+scy*screenX)*3+1]<<endl;
-			cout<<buffer[int(scx+scy*screenX)*3+2]<<endl;
+	for(int scy=0;scy<screenY/(1+supersample);scy++){
+		for(int scx=0;scx<screenX/(1+supersample);scx++){
+			int r=0,g=0,b=0;
+			for(int scxp=0;scxp<(1+supersample);scxp++){
+				for(int scyp=0;scyp<(1+supersample);scyp++){
+					r+=buffer[int(scx*(supersample+1)+scxp+(scy*(supersample+1)+scyp)*screenX)*3+0];
+					g+=buffer[int(scx*(supersample+1)+scxp+(scy*(supersample+1)+scyp)*screenX)*3+1];
+					b+=buffer[int(scx*(supersample+1)+scxp+(scy*(supersample+1)+scyp)*screenX)*3+2];
+				}
+			}
+			cout<<r/(supersample+1)/(supersample+1)<<endl;
+			cout<<g/(supersample+1)/(supersample+1)<<endl;
+			cout<<b/(supersample+1)/(supersample+1)<<endl;
 		}
 	}
 	cout<<"#Rendered\n"<<flush;

@@ -33,9 +33,10 @@ struct Point{
 
 struct Triangle{
 	Point a,b,c;
-	double kd=0.8;int clrR,clrG,clrB;double ka=0.8,ks;
+	double kd=0.8;int clrR,clrG,clrB;double ka=0.8,ks,ir,KS,KT,pot;
 	Triangle(Point a,Point b,Point c):a(a),b(b),c(c){};
 	Triangle(Point a,Point b,Point c,int R,int G,int B,double kd):a(a),b(b),c(c),kd(kd),clrR(R),clrG(G),clrB(B){};
+	Triangle(Point a,Point b,Point c,int R,int G,int B,double ka,double kd,double ks,double pot,double KS,double KT,double ir):pot(pot),KS(KS),KT(KT),ir(ir),a(a),b(b),c(c),ka(ka),kd(kd),ks(ks),clrR(R),clrG(G),clrB(B){};
 };
 
 struct Quadric{
