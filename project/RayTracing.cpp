@@ -112,7 +112,8 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 		}
 	}
 	if(depth&&Dists<10000000000000000000.0){
-		color3f ref=getRayColor(intersec,refRay,depth-1);
+		color3f ref=getRayColor(intersec+refRay*0.01,refRay,depth-1);
+		
 		return cor*(1.0-KS)+ref*KS;
 	}else return cor;
 }
@@ -168,8 +169,12 @@ void ReadCP(){
 int main(void){
 	ReadCP();
 	cam.normalize();
-	memset(buffer,0,sizeof buffer);
-	VTsize=vecTri.size(),VQsize=vecQuad.size(); 		
+	VTsize=vecTri.size(),VQsize=vecQuad.size();
+	/*Point raydir1=!ray(cam,490,270,960,540);
+	cerr<<raydir1.x<<" "<<raydir1.y<<" "<<raydir1.z<<endl;
+	getRayColor(cam.position,!raydir1,1);
+	return 0;*/
+	memset(buffer,0,sizeof buffer); 		
 	for(int scx=0;scx<screenX;scx++){
 		cerr<<scx<<"-"<<endl;
 		for(int scy=0;scy<screenY;scy++){
