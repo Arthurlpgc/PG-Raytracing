@@ -25,21 +25,25 @@ struct Point{
 	}
 	Point operator!()const{
 		return Point(x/mag(),y/mag(),z/mag());
+	}//refletir
+	Point operator^(Point r)const{
+		return (*this)-r*(2.0*((!(*this))*(!r)));
 	}
 };
 
 struct Triangle{
 	Point a,b,c;
-	double kd=0.8;int clrR,clrG,clrB;double ka=0.8;
+	double kd=0.8;int clrR,clrG,clrB;double ka=0.8,ks;
 	Triangle(Point a,Point b,Point c):a(a),b(b),c(c){};
 	Triangle(Point a,Point b,Point c,int R,int G,int B,double kd):a(a),b(b),c(c),kd(kd),clrR(R),clrG(G),clrB(B){};
 };
 
 struct Quadric{
 	double a,b,c,d,e,f,g,h,j,k; //coefficients of quadric surface
-	double kd, ka, ks;
+	double kd, ka, ks,KS,KT,ir;
 	int clrR, clrG, clrB;
-	int pot;
+	double pot;
+	Quadric(){};
 	Quadric(double a, double b, double c, double d, double e, double f, double g, double h, double j, double k, double kd, double ka, double ks, int R, int G, int B, int pot):a(a),b(b),c(c),d(d),e(e),f(f),g(g),h(h),j(j),k(k),kd(kd),ka(ka),ks(ks),clrR(R),clrG(G),clrB(B),pot(pot){};
 };
 #endif 
