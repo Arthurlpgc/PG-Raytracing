@@ -7,7 +7,7 @@ using namespace std;
 const double EPS=0.001;
 Camera cam;
 double screenY=540,screenX=720;
-int dim1,dim2,npts1,npts2,bgR=0,bgG=0,bgB=0,VTsize,VQsize,supersample=0;double IlumAmb=0.2;
+int dim1,dim2,npts1,npts2,bgR=0,bgG=0,bgB=0,VTsize,VQsize,supersample=0,depth=0;double IlumAmb=0.2;
 int *buffer;
 double *Dists;
 vector<vector<Point> > ControlPoints;
@@ -15,21 +15,37 @@ vector<Triangle> vecTri,aux;
 vector<Quadric> vecQuad;
 vector<LightDirectional> vecLgt;
 struct color3f{
-int R,G,B;
+	int R,G,B;
+	color3f operator*(double x){color3f ret;
+	ret.R=max(0,min(int(R*x),255));
+	ret.G=max(0,min(int(G*x),255));
+	ret.B=max(0,min(int(B*x),255));
+	return ret;
+	}
+	color3f operator+(color3f c){
+	color3f ret;
+	ret.R=max(0,min(int(R+c.R),255));
+	ret.G=max(0,min(int(G+c.G),255));
+	ret.B=max(0,min(int(B+c.B),255));
+	return ret;
+	}
 };
-color3f getRayColor(Point initpos,Point raydir){
+color3f getRayColor(Point initpos,Point raydir,int depth=0){
 	color3f cor;
-	double Dists=100000000000000000000.0;
+	Point intersec,refRay;
+	double Dists=100000000000000000000.0,KS=0;
 	cor.R=bgR;
 	cor.G=bgG;
 	cor.B=bgB;
 	for(int i=0;i<VTsize;i++){
 		if(intersect(vecTri[i],initpos,raydir)){
-			Point txr=triXray(vecTri[i],initpos,!raydir);
+			Point txr=intersec=triXray(vecTri[i],initpos,!raydir);
 			if((txr-initpos).mag()<Dists){
 				cor.R=IlumAmb*vecTri[i].ka*vecTri[i].clrR;
 				cor.G=IlumAmb*vecTri[i].ka*vecTri[i].clrG;
 				cor.B=IlumAmb*vecTri[i].ka*vecTri[i].clrB;
+				Point N=!((vecTri[i].a-vecTri[i].b)%(vecTri[i].a-vecTri[i].c));
+				refRay=!(raydir^N);KS=vecTri[i].KS;
 				for(int ltt=0;ltt<vecLgt.size();ltt++){						
 					if(((!vecLgt[ltt].dir)*(!raydir))<=0)continue;
 					bool notBlk=true;
@@ -40,7 +56,6 @@ color3f getRayColor(Point initpos,Point raydir){
 						if(intersectQuad(&vecQuad[j],txr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0))>EPS)notBlk=false;	
 					}
 					if(notBlk){
-						Point N=!((vecTri[i].a-vecTri[i].b)%(vecTri[i].a-vecTri[i].c));
 						cor.R=min(
 	max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrR+vecTri[i].ka*IlumAmb*vecTri[i].clrR+
 	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(vecLgt[ltt].dir^N))*(!raydir)),vecTri[i].pot)))
@@ -63,10 +78,13 @@ color3f getRayColor(Point initpos,Point raydir){
 		double dstqd=intersectQuad(&vecQuad[i],initpos,!raydir);
 		if(dstqd>0&&dstqd<Dists){
 			Dists=dstqd;
-			Point qxr=((!raydir)*dstqd)+initpos;
+			Point qxr=intersec=((!raydir)*dstqd)+initpos;
 			cor.R=IlumAmb*vecQuad[i].ka*vecQuad[i].clrR;
 			cor.G=IlumAmb*vecQuad[i].ka*vecQuad[i].clrG;
 			cor.B=IlumAmb*vecQuad[i].ka*vecQuad[i].clrB;
+			Quadric quad=vecQuad[i];Point inter=qxr;KS=vecQuad[i].KS;
+			Point N(2*quad.a*inter.x+quad.d*inter.y+quad.e*inter.z+quad.g,2*quad.b*inter.y+quad.d*inter.x+quad.f*inter.z+quad.h,2*quad.c*inter.z+quad.e*inter.x+quad.e*inter.y+quad.j);
+			refRay=!(raydir^N);
 			for(int ltt=0;ltt<vecLgt.size();ltt++){						
 				if(((!vecLgt[ltt].dir)*(!raydir))<=0)continue;
 				bool notBlk=true;
@@ -77,8 +95,6 @@ color3f getRayColor(Point initpos,Point raydir){
 					if(intersectQuad(&vecQuad[j],qxr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0))>EPS)notBlk=false;	
 				}
 				if(notBlk){
-					Quadric quad=vecQuad[i];Point inter=qxr;
-					Point N(2*quad.a*inter.x+quad.d*inter.y+quad.e*inter.z+quad.g,2*quad.b*inter.y+quad.d*inter.x+quad.f*inter.z+quad.h,2*quad.c*inter.z+quad.e*inter.x+quad.e*inter.y+quad.j);
 					cor.R=min(255,max(cor.R,
 	int(IlumAmb*vecQuad[i].ka*vecQuad[i].clrR+getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrR+
 	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(fabs((!(vecLgt[ltt].dir^N))*(!raydir)),vecQuad[i].pot))
@@ -95,7 +111,10 @@ color3f getRayColor(Point initpos,Point raydir){
 			}
 		}
 	}
-	return cor;
+	if(depth&&Dists<10000000000000000000.0){
+		color3f ref=getRayColor(intersec,refRay,depth-1);
+		return cor*(1.0-KS)+ref*KS;
+	}else return cor;
 }
 
 void ReadCP(){
@@ -136,6 +155,7 @@ void ReadCP(){
 			cin>>quad.ka>>quad.kd>>quad.ks>>quad.pot>>quad.KS>>quad.KT>>quad.ir;
 			vecQuad.push_back(quad);
 		}else if(input=="supersampling")cin>>supersample;
+		else if(input=="depth")cin>>depth;
 	}
 	cout<<screenX<<" "<<screenY<<endl;
 	screenX*=(1+supersample);
@@ -154,7 +174,7 @@ int main(void){
 		cerr<<scx<<"-"<<endl;
 		for(int scy=0;scy<screenY;scy++){
 			Point raydir=ray(cam,scx,scy,screenX,screenY);
-			color3f cor=getRayColor(cam.position,raydir);
+			color3f cor=getRayColor(cam.position,raydir,depth);
 			buffer[int(scx+scy*screenX)*3+0]=cor.R;
 			buffer[int(scx+scy*screenX)*3+1]=cor.G;
 			buffer[int(scx+scy*screenX)*3+2]=cor.B;
