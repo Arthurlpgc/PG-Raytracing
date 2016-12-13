@@ -89,7 +89,7 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 			refRay=!(N^raydir);
 			for(int ltt=0;ltt<vecLgt.size();ltt++){
 				if(((!vecLgt[ltt].dir)*(!N))<0)continue; 
-				//if(((!vecLgt[ltt].dir)*(!raydir))<=0)continue;
+				if(((!vecLgt[ltt].dir)*(!raydir))<=0)continue;
 				bool notBlk=true;
 				for(int j=0;j<VTsize;j++){
 					if(intersect(vecTri[j],qxr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0)))notBlk=false;
@@ -115,8 +115,10 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 	cor.G=min(cor.G,255);
 	cor.B=min(cor.B,255);
 	if(depth&&Dists<10000000000000000000.0){
+		refRay=refRay*-1;
 		color3f ref=getRayColor(intersec+refRay*EPS,refRay,depth-1);
-		cerr<<raydir.x<<" "<<raydir.y<<" "<<raydir.z<<" - "<<refRay.x<<" "<<refRay.y<<" "<<refRay.z<<endl;
+		cerr<<raydir.x<<" "<<raydir.y<<" "<<raydir.z<<" *-* "<<refRay.x<<" "<<refRay.y<<" "<<refRay.z<<" = "<<ref.R<<" "<<ref.G<<" "<<ref.B<<" "<<endl;
+		swap(ref.B,ref.R);
 		return cor*(1.0-KS)+ref*KS;
 	}else return cor;
 }
