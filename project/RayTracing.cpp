@@ -45,6 +45,7 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 				cor.G=IlumAmb*vecTri[i].ka*vecTri[i].clrG;
 				cor.B=IlumAmb*vecTri[i].ka*vecTri[i].clrB;
 				Point N=!((vecTri[i].a-vecTri[i].b)%(vecTri[i].a-vecTri[i].c));
+				if(N*raydir<0)N=N*(-1.0);
 				refRay=!(N^raydir);KS=vecTri[i].KS;
 				for(int ltt=0;ltt<vecLgt.size();ltt++){						
 					//if(((!vecLgt[ltt].dir)*(!raydir))<=EPS)continue;
@@ -115,21 +116,25 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 	cor.B=min(cor.B,255);
 	if(depth&&Dists<10000000000000000000.0){
 		color3f ref=getRayColor(intersec+refRay*EPS,refRay,depth-1);
-		
+		cerr<<raydir.x<<" "<<raydir.y<<" "<<raydir.z<<" - "<<refRay.x<<" "<<refRay.y<<" "<<refRay.z<<endl;
 		return cor*(1.0-KS)+ref*KS;
 	}else return cor;
 }
 
 void ReadCP(){
+	bool rcf=0;
 	double x,y,z;
 	cout<<"P3\n#Reading..\n";
 	string input;
 	while(cin>>input){
 		if(input[0]=='#')getline(cin,input);
+		else if(input=="raycife")rcf=1;
 		else if(input=="ambient")cin>>IlumAmb;
 		else if(input=="eye"){cin>>cam.position.x>>cam.position.y>>cam.position.z;}
 		else if(input=="camera"){cin>>cam.vecV.x>>cam.vecV.y>>cam.vecV.z>>cam.vecN.x>>cam.vecN.y>>cam.vecN.z;
-					cin>>cam.d>>cam.hx>>cam.hy;cam.resx=screenX;cam.resy=screenY;
+					cin>>cam.d>>cam.hx>>cam.hy;
+		}else if(input=="ortho"){
+			
 		}else if(input=="bezier"){
 			cin>>dim1>>dim2;
 			ControlPoints.clear();
@@ -150,6 +155,7 @@ void ReadCP(){
 		else if(input=="light"){
 			double x,y,z,i;
 			cin>>x>>y>>z>>i;
+			if(rcf){x=-x;y=-y;z=-z;}
 			vecLgt.push_back(LightDirectional(!Point(x,y,z),i));
 		}else if(input=="background")cin>>bgR>>bgG>>bgB;
 		else if(input=="object"){
@@ -162,7 +168,8 @@ void ReadCP(){
 	}
 	cout<<screenX<<" "<<screenY<<endl;
 	screenX*=(1+supersample);
-	screenY*=(1+supersample);	
+	screenY*=(1+supersample);
+	cam.resx=screenX;cam.resy=screenY;	
 	buffer=(int*)malloc(sizeof(int)*screenX*screenY*3);
 	//Dists=(double*)malloc(sizeof(double)*screenX*screenY);
 	cout<<"#DONE!\n255\n";
@@ -172,7 +179,7 @@ int main(void){
 	ReadCP();
 	cam.normalize();
 	VTsize=vecTri.size(),VQsize=vecQuad.size();
-	/*Point raydir1=!ray(cam,490,270,960,540);
+/*	Point raydir1=!ray(cam,470,270,960,540);
 	cerr<<raydir1.x<<" "<<raydir1.y<<" "<<raydir1.z<<endl;
 	getRayColor(cam.position,!raydir1,1);
 	return 0;*/
