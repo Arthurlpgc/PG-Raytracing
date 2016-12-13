@@ -86,14 +86,15 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 			Point N(2*quad.a*inter.x+quad.d*inter.y+quad.e*inter.z+quad.g,2*quad.b*inter.y+quad.d*inter.x+quad.f*inter.z+quad.h,2*quad.c*inter.z+quad.e*inter.x+quad.e*inter.y+quad.j);
 			refRay=!(N^raydir);
 			for(int ltt=0;ltt<vecLgt.size();ltt++){
-				if((!vecLgt[ltt].dir)*(!N)>EPS)continue;						
+				//O BUG É aqui
+				//if(((!vecLgt[ltt].dir)*(!N))<=0)continue; NAO FUNFA
 				if(((!vecLgt[ltt].dir)*(!raydir))<=0)continue;
 				bool notBlk=true;
 				for(int j=0;j<VTsize;j++){
 					if(intersect(vecTri[j],qxr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0)))notBlk=false;
 				}
 				for(int j=0;j<VQsize;j++){
-					if(intersectQuad(&vecQuad[j],qxr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0))>EPS)notBlk=false;	
+					if(intersectQuad(&vecQuad[j],qxr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0))>0)notBlk=false;	
 				}
 				if(notBlk){
 					cor.R=min(255,max(cor.R,
