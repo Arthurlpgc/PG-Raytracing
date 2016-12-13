@@ -4,7 +4,7 @@
 #include "BSurfaces.h"
 #include "camera.h"
 using namespace std;
-const double EPS=0.001;
+const double EPS=0.000001;
 Camera cam;
 double screenY=540,screenX=720;
 int dim1,dim2,npts1,npts2,bgR=0,bgG=0,bgB=0,VTsize,VQsize,supersample=0,depth=0;double IlumAmb=0.2;
@@ -47,7 +47,7 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 				Point N=!((vecTri[i].a-vecTri[i].b)%(vecTri[i].a-vecTri[i].c));
 				refRay=!(N^raydir);KS=vecTri[i].KS;
 				for(int ltt=0;ltt<vecLgt.size();ltt++){						
-					if(((!vecLgt[ltt].dir)*(!raydir))<=0)continue;
+					if(((!vecLgt[ltt].dir)*(!raydir))<=EPS)continue;
 					bool notBlk=true;
 					for(int j=0;j<VTsize;j++){
 						if(intersect(vecTri[j],txr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0)))notBlk=false;
@@ -58,15 +58,15 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 					if(notBlk){
 						cor.R=min(
 	max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrR+vecTri[i].ka*IlumAmb*vecTri[i].clrR+
-	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(N^vecLgt[ltt].dir))*(!raydir)),vecTri[i].pot)))*255
+	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(N^vecLgt[ltt].dir))*(!raydir)),vecTri[i].pot))*255)
 	,cor.R),255);
 						cor.G=min(
 	max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrG+vecTri[i].ka*IlumAmb*vecTri[i].clrG+
-	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(N^vecLgt[ltt].dir))*(!raydir)),vecTri[i].pot)))*255
+	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(N^vecLgt[ltt].dir))*(!raydir)),vecTri[i].pot))*255)
 	,cor.G),255);
 						cor.B=min(
 	max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrB+vecTri[i].ka*IlumAmb*vecTri[i].clrB+
-	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(N^vecLgt[ltt].dir))*(!raydir)),vecTri[i].pot)))*255
+	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(N^vecLgt[ltt].dir))*(!raydir)),vecTri[i].pot))*255)
 	,cor.B),255);
 					}	
 				}
@@ -85,7 +85,8 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 			Quadric quad=vecQuad[i];Point inter=qxr;KS=vecQuad[i].KS;
 			Point N(2*quad.a*inter.x+quad.d*inter.y+quad.e*inter.z+quad.g,2*quad.b*inter.y+quad.d*inter.x+quad.f*inter.z+quad.h,2*quad.c*inter.z+quad.e*inter.x+quad.e*inter.y+quad.j);
 			refRay=!(N^raydir);
-			for(int ltt=0;ltt<vecLgt.size();ltt++){						
+			for(int ltt=0;ltt<vecLgt.size();ltt++){
+				if((!vecLgt[ltt].dir)*(!N)>EPS)continue;						
 				if(((!vecLgt[ltt].dir)*(!raydir))<=0)continue;
 				bool notBlk=true;
 				for(int j=0;j<VTsize;j++){
@@ -112,7 +113,7 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 		}
 	}
 	if(depth&&Dists<10000000000000000000.0){
-		color3f ref=getRayColor(intersec+refRay*0.01,refRay,depth-1);
+		color3f ref=getRayColor(intersec+refRay*EPS,refRay,depth-1);
 		
 		return cor*(1.0-KS)+ref*KS;
 	}else return cor;
