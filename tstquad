@@ -1,18 +1,18 @@
 eye 0 0 100 
 camera 0 1 0 0 0 -1 600 192 108
 light 0.4 0.6 -0.8 0.8
-#light -0.1 0.1 0 0.4
+#light -0.1 0 0 0.4
 light 0 0 -1 0.2
 object 1 1 1 0 0 0 10 0 0 0
 0 40 159
-0.2 0.2 0.2 0.3
-0.6 0 0
+0.2 0.2 0 10
+0 0 0
 object 1 1 1 0 0 0 -10 0 0 0 
 159 40 0
 0.2 0.2 0.2 10
-0.6 0 0
+0 0 0
 ambient 1
-supersampling 3
+supersampling 0
 depth 0
 size 960 540
 
