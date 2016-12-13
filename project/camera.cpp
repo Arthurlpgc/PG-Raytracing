@@ -91,7 +91,7 @@ double getLightTriColor(Triangle tri,LightDirectional lt){
 	return fabs(mult);
 }
 double getLightQuadColor(Quadric quad,LightDirectional lt,Point inter){
-	Point N(2*quad.a*inter.x+quad.d*inter.y+quad.e*inter.z+quad.g,2*quad.b*inter.y+quad.d*inter.x+quad.f*inter.z+quad.h,2*quad.c*inter.z+quad.e*inter.x+quad.e*inter.y+quad.j);
+	Point N(quad.a*inter.x+quad.d*inter.y+quad.e*inter.z+quad.g,quad.b*inter.y+quad.d*inter.x+quad.f*inter.z+quad.h,quad.c*inter.z+quad.e*inter.x+quad.f*inter.y+quad.j);
 	double mult=((N*lt.dir)*lt.Il*quad.kd);
 	return fabs(mult);
 }

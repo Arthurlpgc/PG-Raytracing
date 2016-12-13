@@ -83,11 +83,11 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 			cor.G=IlumAmb*vecQuad[i].ka*vecQuad[i].clrG;
 			cor.B=IlumAmb*vecQuad[i].ka*vecQuad[i].clrB;
 			Quadric quad=vecQuad[i];Point inter=qxr;KS=vecQuad[i].KS;
-			Point N(quad.a*inter.x+quad.d*inter.y+quad.e*inter.z+quad.g,quad.b*inter.y+quad.d*inter.x+quad.f*inter.z+quad.h,quad.c*inter.z+quad.e*inter.x+quad.e*inter.y+quad.j);
+			Point N(quad.a*inter.x+quad.d*inter.y+quad.e*inter.z+quad.g,quad.b*inter.y+quad.d*inter.x+quad.f*inter.z+quad.h,quad.c*inter.z+quad.e*inter.x+quad.f*inter.y+quad.j);
 			if(N*raydir<0)N=N*(-1.0);
 			refRay=!(N^raydir);
 			for(int ltt=0;ltt<vecLgt.size();ltt++){
-				if(((!vecLgt[ltt].dir)*(!N))<=0.1)continue; 
+				if(((!vecLgt[ltt].dir)*(!N))<0)continue; 
 				//if(((!vecLgt[ltt].dir)*(!raydir))<=0)continue;
 				bool notBlk=true;
 				for(int j=0;j<VTsize;j++){
