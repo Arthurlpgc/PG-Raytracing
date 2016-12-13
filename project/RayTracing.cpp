@@ -97,22 +97,22 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 					if(intersectQuad(&vecQuad[j],qxr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0))>0)notBlk=false;	
 				}
 				if(notBlk){
-					cor.R=min(255,max(cor.R,
-	int(IlumAmb*vecQuad[i].ka*vecQuad[i].clrR+getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrR+
-	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(fabs((!(N^vecLgt[ltt].dir))*(!raydir)),vecQuad[i].pot))*255
-	)));
-					cor.G=min(255,max(cor.G,
-	int(IlumAmb*vecQuad[i].ka*vecQuad[i].clrG+getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrG+
-	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(fabs((!(N^vecLgt[ltt].dir))*(!raydir)),vecQuad[i].pot))*255
-	)));
-					cor.B=min(255,max(cor.B,
-	int(IlumAmb*vecQuad[i].ka*vecQuad[i].clrB+getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrB+
-	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(fabs((!(N^vecLgt[ltt].dir))*(!raydir)),vecQuad[i].pot))*255
-	)));
+					cor.R+=
+	int(getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrR+
+	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(fabs((!(N^vecLgt[ltt].dir))*(!raydir)),vecQuad[i].pot))*255);
+					cor.G+=
+	int(getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrG+
+	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(fabs((!(N^vecLgt[ltt].dir))*(!raydir)),vecQuad[i].pot))*255);
+					cor.B+=
+	int(getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrB+
+	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(fabs((!(N^vecLgt[ltt].dir))*(!raydir)),vecQuad[i].pot))*255);
 				}	
 			}
 		}
 	}
+	cor.R=min(cor.R,255);
+	cor.G=min(cor.G,255);
+	cor.B=min(cor.B,255);
 	if(depth&&Dists<10000000000000000000.0){
 		color3f ref=getRayColor(intersec+refRay*EPS,refRay,depth-1);
 		
