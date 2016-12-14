@@ -30,6 +30,14 @@ struct color3f{
 	return ret;
 	}
 };
+
+color3f getDifusaQuad(int i,int ltt,Point qxr){
+	color3f ret;
+	ret.R= getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrR;
+	ret.G= getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrG;
+	ret.B= getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrB;
+	return ret;
+}
 color3f getDifusaQuad(int i,int ltt,Point qxr){
 	color3f ret;
 	ret.R= getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrR;

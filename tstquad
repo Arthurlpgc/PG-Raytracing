@@ -6,15 +6,15 @@ light 0 0 -1 0.2
 object 1 1 1 0 0 0 10 0 0 0
 0 40 159
 0.2 0.2 0 10
-1 0 0
+0 0 0
 object 1 1 1 0 0 0 -10 0 0 0 
 159 40 0
 0.2 0.2 0.2 10
 0 0 0
 ambient 1
-supersampling 0
-depth 1
-size 480 270
+supersampling 1
+depth 0
+size 1920 1080
 
 
 
