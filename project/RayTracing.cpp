@@ -30,6 +30,20 @@ struct color3f{
 	return ret;
 	}
 };
+color3f getDifusaQuad(int i,int ltt,Point qxr){
+	color3f ret;
+	ret.R= getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrR;
+	ret.G= getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrG;
+	ret.B= getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrB;
+	return ret;
+}
+color3f getEspecularQuad(int i,int ltt,Point N,Point raydir){
+	color3f ret;
+	double csn=(!(vecLgt[ltt].dir*(-1)^N))*(!raydir*(-1));
+	if(csn<0)csn=0;
+	ret.R=ret.G=ret.B=fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(csn,vecQuad[i].pot))*255;
+	return ret;
+}
 color3f getRayColor(Point initpos,Point raydir,int depth=0){
 	color3f cor;
 	Point intersec,refRay;
@@ -48,7 +62,7 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 				if(N*raydir>0)N=N*(-1.0);
 				refRay=!(raydir^N);KS=vecTri[i].KS;
 				for(int ltt=0;ltt<vecLgt.size();ltt++){						
-					//if(((!vecLgt[ltt].dir)*(!raydir))<=EPS)continue;
+					if(((!vecLgt[ltt].dir)*(!raydir))<=EPS)continue;
 					bool notBlk=true;
 					for(int j=0;j<VTsize;j++){
 						if(intersect(vecTri[j],txr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0)))notBlk=false;
@@ -59,15 +73,15 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 					if(notBlk){
 						cor.R=min(
 	max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrR+vecTri[i].ka*IlumAmb*vecTri[i].clrR+
-	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(vecLgt[ltt].dir^N))*(!raydir)),vecTri[i].pot))*255)
+	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(vecLgt[ltt].dir*(-1)^N))*(!raydir*(-1))),vecTri[i].pot))*255)
 	,cor.R),255);
 						cor.G=min(
 	max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrG+vecTri[i].ka*IlumAmb*vecTri[i].clrG+
-	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(vecLgt[ltt].dir^N))*(!raydir)),vecTri[i].pot))*255)
+	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(vecLgt[ltt].dir*(-1)^N))*(!raydir*(-1))),vecTri[i].pot))*255)
 	,cor.G),255);
 						cor.B=min(
 	max(int(getLightTriColor(vecTri[i],vecLgt[ltt])*vecTri[i].clrB+vecTri[i].ka*IlumAmb*vecTri[i].clrB+
-	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(vecLgt[ltt].dir^N))*(!raydir)),vecTri[i].pot))*255)
+	fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(vecLgt[ltt].dir*(-1)^N))*(!raydir*(-1))),vecTri[i].pot))*255)
 	,cor.B),255);
 					}	
 				}
@@ -98,15 +112,7 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 					if(intersectQuad(&vecQuad[j],qxr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0))>0)notBlk=false;	
 				}
 				if(notBlk){
-					cor.R+=
-	int(getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrR+
-	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(fabs((!(vecLgt[ltt].dir^N))*(!raydir)),vecQuad[i].pot))*255);
-					cor.G+=
-	int(getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrG+
-	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(fabs((!(vecLgt[ltt].dir^N))*(!raydir)),vecQuad[i].pot))*255);
-					cor.B+=
-	int(getLightQuadColor(vecQuad[i],vecLgt[ltt],qxr)*vecQuad[i].clrB+
-	fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(fabs((!(vecLgt[ltt].dir^N))*(!raydir)),vecQuad[i].pot))*255);
+					cor=cor+getDifusaQuad(i,ltt,qxr)+getEspecularQuad(i,ltt,N,raydir);
 				}	
 			}
 		}
