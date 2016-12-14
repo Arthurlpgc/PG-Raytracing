@@ -6,27 +6,27 @@
 using namespace std;
 const double EPS=0.0001;
 Camera cam;
-double screenY=540,screenX=720;
-int dim1,dim2,npts1,npts2,bgR=0,bgG=0,bgB=0,VTsize,VQsize,supersample=0,depth=0;double IlumAmb=0.2;
-int *buffer;
+double screenY=540,screenX=720;double bgR,bgG,bgB;
+int dim1,dim2,npts1,npts2,VTsize,VQsize,supersample=0,depth=0;double IlumAmb=0.2;
+double *buffer;
 double *Dists;
 vector<vector<Point> > ControlPoints;
 vector<Triangle> vecTri,aux;
 vector<Quadric> vecQuad;
 vector<LightDirectional> vecLgt;
 struct color3f{
-	int R,G,B;
+	double R,G,B;
 	color3f operator*(double x){color3f ret;
-	ret.R=max(0,min(int(R*x),255));
-	ret.G=max(0,min(int(G*x),255));
-	ret.B=max(0,min(int(B*x),255));
+	ret.R=max(0.0,min(R*x,255.0));
+	ret.G=max(0.0,min(G*x,255.0));
+	ret.B=max(0.0,min(B*x,255.0));
 	return ret;
 	}
 	color3f operator+(color3f c){
 	color3f ret;
-	ret.R=max(0,min(int(R+c.R),255));
-	ret.G=max(0,min(int(G+c.G),255));
-	ret.B=max(0,min(int(B+c.B),255));
+	ret.R=max(0.0,min(R+c.R,255.0));
+	ret.G=max(0.0,min(G+c.G,255.0));
+	ret.B=max(0.0,min(B+c.B,255.0));
 	return ret;
 	}
 };
@@ -40,7 +40,7 @@ color3f getDifusaTri(int i,int ltt){
 }
 color3f getEspecularTri(int i,int ltt,Point N,Point raydir){
 	color3f ret;
-	ret.R=ret.G=ret.B=fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(vecLgt[ltt].dir*(-1)^N))*(!raydir*(-1))),vecTri[i].pot))*255;
+	ret.R=ret.G=ret.B=fabs(vecLgt[ltt].Il*vecTri[i].ks*pow(fabs((!(vecLgt[ltt].dir*(-1)^N))*(!raydir*(-1))),vecTri[i].pot));
 	return ret;
 }	
 color3f getDifusaQuad(int i,int ltt,Point qxr){
@@ -54,7 +54,7 @@ color3f getEspecularQuad(int i,int ltt,Point N,Point raydir){
 	color3f ret;
 	double csn=(!(vecLgt[ltt].dir*(-1)^N))*(!raydir*(-1));
 	if(csn<0)csn=0;
-	ret.R=ret.G=ret.B=fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(csn,vecQuad[i].pot))*255;
+	ret.R=ret.G=ret.B=fabs(vecLgt[ltt].Il*vecQuad[i].ks*pow(csn,vecQuad[i].pot));
 	return ret;
 }
 color3f getRayColor(Point initpos,Point raydir,int depth=0){
@@ -117,9 +117,9 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 			}
 		}
 	}
-	cor.R=min(cor.R,255);
-	cor.G=min(cor.G,255);
-	cor.B=min(cor.B,255);
+	cor.R=min(cor.R,255.0);
+	cor.G=min(cor.G,255.0);
+	cor.B=min(cor.B,255.0);
 	if(depth&&Dists<10000000000000000000.0){
 		color3f ref=getRayColor(intersec+refRay*EPS,refRay,depth-1);
 		//cerr<<raydir.x<<" "<<raydir.y<<" "<<raydir.z<<" *-* "<<refRay.x<<" "<<refRay.y<<" "<<refRay.z<<" = "<<ref.R<<" "<<ref.G<<" "<<ref.B<<" "<<endl;
@@ -177,7 +177,7 @@ void ReadCP(){
 	screenX*=(1+supersample);
 	screenY*=(1+supersample);
 	cam.resx=screenX;cam.resy=screenY;	
-	buffer=(int*)malloc(sizeof(int)*screenX*screenY*3);
+	buffer=(double*)malloc(sizeof(double)*screenX*screenY*3);
 	//Dists=(double*)malloc(sizeof(double)*screenX*screenY);
 	cout<<"#DONE!\n255\n";
 }
@@ -211,9 +211,9 @@ int main(void){
 					b+=buffer[int(scx*(supersample+1)+scxp+(scy*(supersample+1)+scyp)*screenX)*3+2];
 				}
 			}
-			cout<<r/(supersample+1)/(supersample+1)<<endl;
-			cout<<g/(supersample+1)/(supersample+1)<<endl;
-			cout<<b/(supersample+1)/(supersample+1)<<endl;
+			cout<<int(255.0*r/(supersample+1)/(supersample+1))<<endl;
+			cout<<int(255.0*g/(supersample+1)/(supersample+1))<<endl;
+			cout<<int(255.0*b/(supersample+1)/(supersample+1))<<endl;
 		}
 	}
 	cout<<"#Rendered\n"<<flush;
