@@ -104,8 +104,6 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 			if(N*raydir>0)N=N*(-1.0);
 			refRay=!(raydir^N);
 			for(int ltt=0;ltt<vecLgt.size();ltt++){
-				if(((!vecLgt[ltt].dir)*(!N))>0)continue; 
-				if(((!vecLgt[ltt].dir)*(!raydir))<=0)continue;
 				bool notBlk=true;
 				for(int j=0;j<VTsize;j++){
 					if(intersect(vecTri[j],qxr-(vecLgt[ltt].dir*EPS),vecLgt[ltt].dir*(-1.0)))notBlk=false;

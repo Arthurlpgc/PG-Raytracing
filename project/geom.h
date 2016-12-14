@@ -27,7 +27,7 @@ struct Point{
 		return Point(x/mag(),y/mag(),z/mag());
 	}//refletir
 	Point operator^(Point r)const{
-		return r*(2.0*(((*this))*(!r)))-(*this);
+		return (!r)*(2.0*(((*this))*(!r)))-(*this);
 	}
 };
 
