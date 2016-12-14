@@ -154,7 +154,7 @@ void ReadCP(){
 				ControlPoints.push_back(auxV);
 			}
 			cin>>npts1>>npts2;
-			int R,G,B;double ka,kd,ks,pot,KS,KT,ir;
+			double R,G,B;double ka,kd,ks,pot,KS,KT,ir;
 			cin>>R>>G>>B>>ka>>kd>>ks>>pot>>KS>>KT>>ir;
 			aux=GenerateBezierTriangles(ControlPoints,npts1,npts2,R,G,B,ka,kd,ks,pot,KS,KT,ir);
 			vecTri.insert(vecTri.end(),make_move_iterator(aux.begin()),make_move_iterator(aux.end()));
@@ -203,7 +203,7 @@ int main(void){
 	}	
 	for(int scy=0;scy<screenY/(1+supersample);scy++){
 		for(int scx=0;scx<screenX/(1+supersample);scx++){
-			int r=0,g=0,b=0;
+			double r=0,g=0,b=0;
 			for(int scxp=0;scxp<(1+supersample);scxp++){
 				for(int scyp=0;scyp<(1+supersample);scyp++){
 					r+=buffer[int(scx*(supersample+1)+scxp+(scy*(supersample+1)+scyp)*screenX)*3+0];

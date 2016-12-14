@@ -33,7 +33,7 @@ struct Point{
 
 struct Triangle{
 	Point a,b,c;
-	double kd=0.8;int clrR,clrG,clrB;double ka=0.8,ks,ir,KS,KT,pot;
+	double kd=0.8;double clrR,clrG,clrB;double ka=0.8,ks,ir,KS,KT,pot;
 	Triangle(Point a,Point b,Point c):a(a),b(b),c(c){};
 	Triangle(Point a,Point b,Point c,int R,int G,int B,double kd):a(a),b(b),c(c),kd(kd),clrR(R),clrG(G),clrB(B){};
 	Triangle(Point a,Point b,Point c,int R,int G,int B,double ka,double kd,double ks,double pot,double KS,double KT,double ir):pot(pot),KS(KS),KT(KT),ir(ir),a(a),b(b),c(c),ka(ka),kd(kd),ks(ks),clrR(R),clrG(G),clrB(B){};
@@ -42,7 +42,7 @@ struct Triangle{
 struct Quadric{
 	double a,b,c,d,e,f,g,h,j,k; //coefficients of quadric surface
 	double kd, ka, ks,KS,KT,ir;
-	int clrR, clrG, clrB;
+	double clrR, clrG, clrB;
 	double pot;
 	Quadric(){};
 	Quadric(double a, double b, double c, double d, double e, double f, double g, double h, double j, double k, double kd, double ka, double ks, int R, int G, int B, int pot):a(a),b(b),c(c),d(d),e(e),f(f),g(g),h(h),j(j),k(k),kd(kd),ka(ka),ks(ks),clrR(R),clrG(G),clrB(B),pot(pot){};
