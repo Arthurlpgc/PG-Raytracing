@@ -211,9 +211,9 @@ int main(void){
 					b+=buffer[int(scx*(supersample+1)+scxp+(scy*(supersample+1)+scyp)*screenX)*3+2];
 				}
 			}
-			cout<<int(255.0*r/(supersample+1)/(supersample+1))<<endl;
-			cout<<int(255.0*g/(supersample+1)/(supersample+1))<<endl;
-			cout<<int(255.0*b/(supersample+1)/(supersample+1))<<endl;
+			cout<<int(255.0*min(1.0,r/(supersample+1)/(supersample+1)))<<endl;
+			cout<<int(255.0*min(1.0,g/(supersample+1)/(supersample+1)))<<endl;
+			cout<<int(255.0*min(1.0,b/(supersample+1)/(supersample+1)))<<endl;
 		}
 	}
 	cout<<"#Rendered\n"<<flush;
