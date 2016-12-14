@@ -53,7 +53,7 @@ double intersectQuad(Quadric *q, Point p, Point dir){
 
 	}	
 
-	if (t < 0.001) return -1.0;
+	if (t < 0.00001) return -1.0;
 	
 	return t;	
 }
