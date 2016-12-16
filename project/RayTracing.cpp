@@ -129,7 +129,7 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 }
 
 void ReadCP(){
-	bool rcf=0;
+	bool rcf=1;
 	double x,y,z;
 	cout<<"P3\n#Reading..\n";
 	string input;
@@ -170,8 +170,12 @@ void ReadCP(){
 			cin>>quad.a>>quad.b>>quad.c>>quad.d>>quad.e>>quad.f>>quad.g>>quad.h>>quad.j>>quad.k>>quad.clrR>>quad.clrG>>quad.clrB;
 			cin>>quad.ka>>quad.kd>>quad.ks>>quad.pot>>quad.KS>>quad.KT>>quad.ir;
 			vecQuad.push_back(quad);
-		}else if(input=="supersampling")cin>>supersample;
-		else if(input=="depth")cin>>depth;
+		}else if(input=="antialising")cin>>supersample;
+		else if(input=="supersampling"){
+			cin>>input;
+			if(input=="on")supersample=1;
+		}
+		else if(input=="profundidade"||input=="depth")cin>>depth;
 	}
 	cout<<screenX<<" "<<screenY<<endl;
 	screenX*=(1+supersample);
