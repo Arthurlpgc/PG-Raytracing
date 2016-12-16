@@ -141,7 +141,13 @@ void ReadCP(){
 		else if(input=="camera"){cin>>cam.vecV.x>>cam.vecV.y>>cam.vecV.z>>cam.vecN.x>>cam.vecN.y>>cam.vecN.z;
 					cin>>cam.d>>cam.hx>>cam.hy;
 		}else if(input=="ortho"){
-			
+			cam.vecV.x = 0; cam.vecV.y = 1; cam.vecV.z = 0;
+			cam.vecN.x = 0; cam.vecN.y = 0; cam.vecN.z = -1;
+			cam.d = cam.position.z;
+			double aux1, aux2, aux3, aux4;
+			cin>>aux1>>aux2>>aux3>>aux4;
+			cam.hx = (fabs(aux1-aux3))/2.0;
+			cam.hy = (fabs(aux2-aux4))/2.0;			
 		}else if(input=="bezier"){
 			cin>>dim1>>dim2;
 			ControlPoints.clear();

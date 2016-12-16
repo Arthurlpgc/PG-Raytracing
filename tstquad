@@ -1,9 +1,9 @@
 eye 0 0 100 
 output ../caiocuzao.pnm
-camera 0 1 0 0 0 -1 600 192 108
+#camera 0 1 0 0 0 -1 600 192 108
 light -0.4 -0.6 0.8 0.8
 light 0.1 -0.2 0.3 0.4
-#ortho 96 54 -96 -54
+ortho 32 18 -32 -18
 #light 0 0 -1 0.2
 #light 0 1 0 1
 object 1 1 1 0 0 0 10 0 0 0
