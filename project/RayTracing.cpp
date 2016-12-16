@@ -127,11 +127,11 @@ color3f getRayColor(Point initpos,Point raydir,int depth=0){
 		return cor*(1.0-KS)+ref*KS;
 	}else return cor;
 }
-
+FILE fp;
 void ReadCP(){
+	fp=*stdout;
 	bool rcf=1;
 	double x,y,z;
-	cout<<"P3\n#Reading..\n";
 	string input;
 	while(cin>>input){
 		if(input[0]=='#')getline(cin,input);
@@ -165,7 +165,10 @@ void ReadCP(){
 			if(rcf){x=-x;y=-y;z=-z;}
 			vecLgt.push_back(LightDirectional(!Point(x,y,z),i));
 		}else if(input=="background")cin>>bgR>>bgG>>bgB;
-		else if(input=="object"){
+		else if(input=="output"){
+			cin>>input;
+			*stdout = *fopen(input.c_str(),"w");
+		}else if(input=="object"){
 			Quadric quad;
 			cin>>quad.a>>quad.b>>quad.c>>quad.d>>quad.e>>quad.f>>quad.g>>quad.h>>quad.j>>quad.k>>quad.clrR>>quad.clrG>>quad.clrB;
 			cin>>quad.ka>>quad.kd>>quad.ks>>quad.pot>>quad.KS>>quad.KT>>quad.ir;
@@ -177,6 +180,7 @@ void ReadCP(){
 		}
 		else if(input=="profundidade"||input=="depth")cin>>depth;
 	}
+	cout<<"P3\n#Reading..\n";
 	cout<<screenX<<" "<<screenY<<endl;
 	screenX*=(1+supersample);
 	screenY*=(1+supersample);
@@ -220,6 +224,6 @@ int main(void){
 			cout<<int(255.0*min(1.0,b/(supersample+1)/(supersample+1)))<<endl;
 		}
 	}
-	cout<<"#Rendered\n"<<flush;
+	*stdout=fp;
 	return 0;
 }
